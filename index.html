@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT - Biologi Kelas XI (Sel)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        
+        /* Header & Timer */
+        .header-cbt { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #3498db; padding-bottom: 15px; margin-bottom: 20px; }
+        #timer-box { background: #e74c3c; color: white; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 1.1em; min-width: 120px; text-align: center; }
+        
+        /* Panel Nomor */
+        .number-panel { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
+        .num-btn { width: 40px; height: 40px; border: 1px solid #ddd; background: #f8f9fa; cursor: pointer; border-radius: 6px; font-weight: 600; }
+        .num-btn.active { background: #3498db; color: white; border-color: #2980b9; }
+        .num-btn.filled { background: #2ecc71; color: white; border-color: #27ae60; }
+
+        /* Area Soal */
+        .question-area { background: #fff; padding: 20px; border: 1px solid #e1e4e8; border-radius: 8px; }
+        .options { list-style: none; padding: 0; }
+        .options li { margin: 12px 0; padding: 15px; border: 1px solid #edeff2; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; }
+        .options li:hover { background: #f1f8ff; border-color: #3498db; }
+        .options li.selected { background: #e8f4fc; border-color: #3498db; font-weight: 600; }
+        .options input { margin-right: 15px; transform: scale(1.2); }
+
+        /* Kotak Pembahasan pada Soal */
+        .explanation-box { margin-top: 20px; border: 1px solid #dcdfe6; border-radius: 8px; overflow: hidden; background: #f8f9fa; }
+        .exp-toggle-btn { width: 100%; padding: 12px 15px; background: #eaf2f8; border: none; text-align: left; font-weight: bold; font-size: 0.95em; color: #2c3e50; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+        .exp-toggle-btn:hover { background: #d6eaf8; }
+        .exp-content { display: none; padding: 15px; font-size: 0.95em; color: #2d3748; line-height: 1.5; background: #ffffff; border-top: 1px solid #e1e4e8; }
+
+        /* Navigasi */
+        .navigation { display: flex; justify-content: space-between; margin-top: 30px; }
+        button.nav-btn { padding: 12px 25px; border: none; background: #34495e; color: white; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button.nav-btn:hover { opacity: 0.9; }
+        button.nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
+        
+        /* Area Hasil */
+        #result-area { display: none; margin-top: 30px; padding: 20px; background: #eef9f1; border-radius: 8px; border: 1px solid #c3e6cb; }
+        .explanation-item { background: #fff; border: 1px solid #dcdfe6; border-radius: 6px; margin-bottom: 10px; overflow: hidden; }
+        .explanation-header { padding: 12px 15px; background: #f8f9fa; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e4e8; }
+        .explanation-header:hover { background: #edf2f7; }
+        .explanation-body { display: none; padding: 15px; font-size: 0.95em; color: #2d3748; line-height: 1.5; background: #fff; }
+        .badge-correct { color: #27ae60; font-weight: bold; }
+        .badge-wrong { color: #e74c3c; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-cbt">
+        <div>
+            <h2 style="margin:0;">Penilaian Sumatif - Biologi</h2>
+            <small>Materi: Bab Sel (Kelas XI SMA/MA)</small>
+        </div>
+        <div id="timer-box">Sisa Waktu: <span id="timer">04:00</span></div>
+    </div>
+    
+    <div class="number-panel" id="number-panel"></div>
+
+    <div class="question-area" id="question-container">
+        <h3 id="question-text">Memuat soal...</h3>
+        <ul class="options" id="options-list"></ul>
+        
+        <!-- Pembahasan di Bagian Bawah Soal -->
+        <div class="explanation-box">
+            <button class="exp-toggle-btn" onclick="toggleCurrentExp()">
+                <span>💡 Kunci & Pembahasan Soal</span>
+                <span id="exp-icon-current">▼ Tampilkan</span>
+            </button>
+            <div class="exp-content" id="exp-content-current">
+                <p style="margin-top:0;"><b>Kunci Jawaban:</b> <span id="exp-key"></span></p>
+                <p style="margin-bottom:0;"><b>Pembahasan:</b> <br><span id="exp-text"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="manualChange(-1)">Sebelumnya</button>
+        <button class="nav-btn" style="background: #e67e22;" onclick="confirmFinish()">Selesai Ujian</button>
+        <button class="nav-btn" id="next-btn" onclick="manualChange(1)">Selanjutnya</button>
+    </div>
+
+    <div id="result-area">
+        <h3 id="score-text"></h3>
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;">
+        <h4 style="margin-top:0;">Hasil & Rekapitulasi Pembahasan (Klik untuk membuka/menutup):</h4>
+        <div id="explanation-list"></div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { 
+            q: "Sitoplasma adalah semua bagian isi sel, kecuali ....", 
+            a: ["ribosom", "badan Golgi", "lisosom", "nukleus", "mitokondria"], 
+            correct: 3,
+            exp: "Sitoplasma adalah semua bagian isi sel yang letaknya berada di antara membran sel dan nukleus. Semua organ sel ini termasuk ribosom, badan Golgi, lisosom, dan mitokondria. Sementara, nukleus adalah organel sel tersendiri yang mengandung materi genetik sel, seperti DNA dan berfungsi mengatur aktivitas sel."
+        },
+        { 
+            q: "Organel pada sel tumbuhan yang merupakan tempat penyimpanan cadangan makanan adalah ....", 
+            a: ["nukleus", "leukoplas", "sitoplasma", "sitosol", "ribosom"], 
+            correct: 1,
+            exp: "Organel sel pada tumbuhan yang berfungsi sebagai tempat penyimpanan cadangan makanan disebut dengan leukoplas. Organel ini biasanya ditemukan di dalam sel-sel penyimpanan, seperti akar, umbi, dan biji pada tumbuhan."
+        },
+        { 
+            q: "Perhatikan ciri-ciri suatu organel berikut!\n(1) Mengandung klorofil.\n(2) Memiliki membran ganda.\n(3) Memiliki membran khusus yang mengalami pelipatan ke arah dalam membentuk lembaran.\n\nBerdasarkan ciri-ciri di atas, nama organel beserta fungsinya yang benar adalah .... [HOTS]", 
+            a: [
+                "vakuola, sebagai tempat penyimpanan cadangan makanan", 
+                "mitokondria, sebagai tempat pengatur seluruh kegiatan sel", 
+                "ribosom, sebagai tempat berlangsungnya sintesis protein", 
+                "nukleus, sebagai tempat berlangsungnya respirasi sel", 
+                "kloroplas, sebagai tempat fotosintesis"
+            ], 
+            correct: 4,
+            exp: "Berdasarkan ciri-ciri organel yang terdapat pada soal, organel yang dimaksud adalah kloroplas. Kloroplas berperan dalam proses fotosintesis."
+        },
+        { 
+            q: "Pernyataan yang salah tentang sel adalah ....", 
+            a: [
+                "Sel merupakan unit terkecil yang tidak bisa berdiri sendiri.", 
+                "Sel dapat melaksanakan aktivitas kehidupan.", 
+                "Sel adalah satuan struktural makhluk hidup.", 
+                "Sel mengandung materi genetik.", 
+                "Sel sebagai unit fungsional makhluk hidup."
+            ], 
+            correct: 0,
+            exp: "Sel merupakan unit terkecil makhluk hidup yang dapat berdiri sendiri (terutama pada organisme uniseluler)."
+        },
+        { 
+            q: "Berikut yang bukan termasuk metode para peneliti dalam mengkaji sel adalah ....", 
+            a: ["metode mikroskopi", "metode biakan sel", "metode fraksinasi sel dan isinya", "teknik DNA rekombinan", "metode pelacakan dengan sinar alfa"], 
+            correct: 4,
+            exp: "Dalam mengkaji sel, peneliti menggunakan lima metode, yaitu metode mikroskopik, biakan sel, fraksinasi sel dan isinya, teknik DNA rekombinan, dan pelacakan molekuler dengan radioisotop dan antibodi."
+        },
+        { 
+            q: "Berikut ini organel yang hanya terdapat pada sel tumbuhan adalah ....", 
+            a: ["ribosom", "peroksisom", "sentriol", "glioksisom", "dinding sel"], 
+            correct: 4,
+            exp: "Dinding sel merupakan organel yang hanya terdapat pada sel tumbuhan. Dinding sel merupakan organel kaku yang tersusun atas selulosa."
+        },
+        { 
+            q: "Sel tersusun dari komponen organik berupa karbohidrat, lemak, protein, dan asam nukleat. Apabila dilakukan analisis, bagian sel yang paling banyak mengandung asam nukleat adalah ....", 
+            a: ["inti sel", "dinding sel", "sitoplasma", "membran sel", "ribosom"], 
+            correct: 0,
+            exp: "Asam nukleat bisa terdapat di nukleus, kloroplas, mitokondria (DNA), sitoplasma, dan ribosom (RNA). Namun, yang paling banyak ditemukan, yaitu di nukleus atau inti sel."
+        },
+        { 
+            q: "Di bawah ini adalah pasangan yang menyatakan karakteristik khusus sel dari tumbuhan ialah ....", 
+            a: [
+                "mitokondria dan lisosom", 
+                "kloroplas dan dinding sel", 
+                "retikulum endoplasma dan kompleks Golgi", 
+                "vakuola dan nukleus", 
+                "membran plasma dan nukleus"
+            ], 
+            correct: 1,
+            exp: "Karakteristik khas sel tumbuhan adalah memiliki kloroplas dan dinding sel."
+        },
+        { 
+            q: "Membran plasma tersusun atas komponen berikut, kecuali ....", 
+            a: ["fosfolipid", "protein", "glikolipid", "glikoprotein", "selulosa"], 
+            correct: 4,
+            exp: "Membran plasma tersusun dari beberapa komponen berikut:\n1) Fosfolipid dan protein yang membentuk bilayer.\n2) Karbohidrat yang berikatan dengan lipid (glikolipid) atau protein (glikoprotein).\nSelulosa merupakan penyusun dinding sel, bukan penyusun membran plasma."
+        },
+        { 
+            q: "Berikut yang bukan tergolong ke dalam fungsi retikulum endoplasma ialah ....", 
+            a: ["sintesis protein", "detoksifikasi", "tempat merekatnya ribosom", "transpor materi di dalam sel", "sintesis lemak"], 
+            correct: 0,
+            exp: "Sintesis protein merupakan fungsi utama dari organel ribosom."
+        },
+        { 
+            q: "Suatu organel sel berbentuk kantong pipih yang bertumpuk-tumpuk dan dapat membentuk vesikula. Organel dengan struktur tersebut memiliki fungsi dalam .... [HOTS]", 
+            a: [
+                "melakukan pencernaan intrasel", 
+                "melakukan sintesis protein", 
+                "melakukan proses sekresi", 
+                "memproduksi karbohidrat", 
+                "memproduksi ATP"
+            ], 
+            correct: 2,
+            exp: "Organel sel berbentuk kantong pipih yang bertumpuk-tumpuk adalah kompleks Golgi. Kompleks Golgi dapat membentuk vesikula sehingga dapat berperan dalam proses sekresi zat keluar sel."
+        },
+        { 
+            q: "Struktur sel yang berfungsi untuk mengubah energi dari makanan menjadi bentuk energi yang dapat digunakan oleh sel adalah ....", 
+            a: ["lisosom", "mitokondria", "ribosom", "retikulum endoplasma", "nukleus"], 
+            correct: 1,
+            exp: "Struktur sel yang berperan mengubah energi dari makanan menjadi bentuk energi yang dapat digunakan oleh sel disebut dengan mitokondria. Proses ini dikenal dengan respirasi seluler, di mana mitokondria akan menghasilkan adenosin trifosfat (ATP)."
+        },
+        { 
+            q: "Perhatikan pernyataan di bawah ini!\n(1) Sel darah merah yang mentranspor oksigen.\n(2) Sel B plasma memproduksi antibodi.\n(3) Sel adiposa yang menyimpan lemak.\n(4) Sel Langerhans yang mengekskresi insulin.\n\nSel yang mempunyai retikulum endoplasma dan badan Golgi dalam jumlah banyak adalah .... [HOTS]", 
+            a: ["(1) dan (3)", "(1) dan (4)", "(2) dan (3)", "(2) dan (4)", "(1) dan (2)"], 
+            correct: 3,
+            exp: "Pada soal tersebut, sel yang memiliki retikulum endoplasma dan badan Golgi dalam jumlah banyak adalah sel B plasma dan sel Langerhans. Sel B plasma mampu memproduksi antibodi, sementara sel Langerhans menghasilkan hormon insulin yang diproses dan dikemas oleh RE dan badan Golgi sebelum dilepaskan ke luar sel."
+        },
+        { 
+            q: "Jenis mikroskop yang dapat digunakan untuk mengamati virus Corona adalah mikroskop ....", 
+            a: ["cahaya", "elektron", "stereo", "ultraviolet", "medan gelap"], 
+            correct: 1,
+            exp: "Mikroskop yang digunakan untuk mengamati virus Corona adalah mikroskop elektron karena virus berukuran nanometer."
+        },
+        { 
+            q: "Organel yang hanya ditemukan pada sel hewan adalah ....", 
+            a: ["plastida", "ribosom", "sentriol", "mitokondria", "membran sel"], 
+            correct: 2,
+            exp: "Sentriol merupakan salah satu jenis organel yang hanya ditemukan pada sel hewan."
+        },
+        { 
+            q: "Bagian dari sel yang berfungsi untuk transportasi dari luar ke dalam sel atau sebaliknya adalah ....", 
+            a: ["dinding sel", "membran sel", "ribosom", "badan Golgi", "lisosom"], 
+            correct: 1,
+            exp: "Membran sel merupakan bagian sel yang berfungsi dalam transportasi dari luar ke dalam sel."
+        },
+        { 
+            q: "Mikroskop terdiri atas dua bagian, yaitu bagian optik dan bagian mekanis. Bagian optik mikroskop yang berfungsi mengatur banyak sedikitnya cahaya yang masuk ke kondensor adalah .... [HOTS]", 
+            a: ["diafragma", "reflektor", "revolver", "makrometer", "mikrometer"], 
+            correct: 0,
+            exp: "Diafragma berfungsi mengatur banyak sedikitnya cahaya yang masuk ke kondensor."
+        },
+        { 
+            q: "Berikut yang merupakan perbedaan sel hewan dan sel tumbuhan adalah ....", 
+            a: [
+                "pada hewan terdapat plastida, pada tumbuhan tidak ada", 
+                "pada hewan tidak terdapat badan Golgi, pada tumbuhan ada badan Golgi", 
+                "pada hewan terdapat badan Golgi, pada tumbuhan ada badan Golgi", 
+                "pada tumbuhan tidak terdapat mikrotubulus, pada hewan ada", 
+                "pada hewan ada vakuola yang besar, pada tumbuhan ada vakuola, tetapi kecil"
+            ], 
+            correct: 3,
+            exp: "Perbedaan umum sel hewan dan tumbuhan:\n1) Sel hewan tidak memiliki dinding sel, sel tumbuhan memiliki.\n2) Sel hewan tidak memiliki plastida, sel tumbuhan memiliki.\n3) Sel hewan memiliki sentriol (yang tersusun atas mikrotubulus), sedangkan tumbuhan tingkat tinggi tidak."
+        },
+        { 
+            q: "Organel sel yang mempunyai ciri-ciri bentuk bulat, dibungkus oleh suatu membran yang mengandung enzim pencernaan adalah ....", 
+            a: ["badan Golgi", "nukleus", "ribosom", "lisosom", "mitokondria"], 
+            correct: 3,
+            exp: "Lisosom adalah organel sel yang berbentuk bulatan kantung membran dan dihasilkan oleh badan Golgi. Lisosom berfungsi sebagai sistem pencernaan intraseluler karena mengandung enzim hidrolitik."
+        },
+        { 
+            q: "Sel merupakan kesatuan unit struktural pada semua makhluk hidup. Hal ini mengandung pengertian bahwa .... [HOTS]", 
+            a: [
+                "sel bertugas dalam penurunan sifat pada makhluk hidup", 
+                "semua kegiatan dalam hidup dapat terselenggara karena adanya protoplasma dalam sel", 
+                "sel merupakan penyusun utama tubuh makhluk hidup", 
+                "pertumbuhan pada makhluk hidup disebabkan karena adanya sel dalam tubuh", 
+                "reproduksi pada makhluk hidup disebabkan kemampuan sel untuk membelah diri"
+            ], 
+            correct: 2,
+            exp: "Sel merupakan unit struktural dan fungsional terkecil dari makhluk hidup. Sebagai unit struktural, berarti setiap makhluk hidup tersusun atas sel (sel merupakan penyusun utama tubuh makhluk hidup)."
+        }
+    ];
+
+    let currentIdx = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+    let timeLeft = 240; 
+    let timerInterval;
+
+    function init() {
+        renderPanel();
+        showQuestion();
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = 240; 
+        updateTimerDisplay();
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+            
+            if (timeLeft <= 0) {
+                autoNext();
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timer').innerText = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        const box = document.getElementById('timer-box');
+        if (timeLeft < 60) box.style.background = "#f39c12";
+        else box.style.background = "#e74c3c";
+    }
+
+    function showQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('question-text').innerText = `Soal ${currentIdx + 1}: ${q.q}`;
+        const list = document.getElementById('options-list');
+        list.innerHTML = '';
+        
+        q.a.forEach((opt, i) => {
+            const li = document.createElement('li');
+            const char = String.fromCharCode(65 + i);
+            const isSelected = userAnswers[currentIdx] === i;
+            
+            if (isSelected) li.classList.add('selected');
+            
+            li.innerHTML = `<input type="radio" name="opt" ${isSelected ? 'checked' : ''}> ${char}. ${opt}`;
+            li.onclick = () => saveAnswer(i);
+            list.appendChild(li);
+        });
+
+        // Set Pembahasan
+        const correctChar = String.fromCharCode(65 + q.correct);
+        document.getElementById('exp-key').innerText = `${correctChar}. ${q.a[q.correct]}`;
+        document.getElementById('exp-text').innerHTML = q.exp.replace(/\n/g, '<br>');
+
+        // Sembunyikan isi pembahasan saat ganti soal
+        document.getElementById('exp-content-current').style.display = 'none';
+        document.getElementById('exp-icon-current').innerText = '▼ Tampilkan';
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === questions.length - 1;
+        renderPanel();
+    }
+
+    function toggleCurrentExp() {
+        const content = document.getElementById('exp-content-current');
+        const icon = document.getElementById('exp-icon-current');
+        if (content.style.display === 'block') {
+            content.style.display = 'none';
+            icon.innerText = '▼ Tampilkan';
+        } else {
+            content.style.display = 'block';
+            icon.innerText = '▲ Sembunyikan';
+        }
+    }
+
+    function saveAnswer(i) {
+        userAnswers[currentIdx] = i;
+        showQuestion(); 
+    }
+
+    function manualChange(step) {
+        currentIdx += step;
+        showQuestion();
+        startTimer(); 
+    }
+
+    function autoNext() {
+        if (currentIdx < questions.length - 1) {
+            currentIdx++;
+            showQuestion();
+            startTimer();
+        } else {
+            clearInterval(timerInterval);
+            alert("Waktu habis atau ujian telah selesai.");
+            finishQuiz();
+        }
+    }
+
+    function renderPanel() {
+        const panel = document.getElementById('number-panel');
+        panel.innerHTML = '';
+        questions.forEach((_, i) => {
+            const btn = document.createElement('button');
+            btn.innerText = i + 1;
+            let cls = 'num-btn';
+            if (i === currentIdx) cls += ' active';
+            if (userAnswers[i] !== null) cls += ' filled';
+            btn.className = cls;
+            btn.onclick = () => { currentIdx = i; showQuestion(); startTimer(); };
+            panel.appendChild(btn);
+        });
+    }
+
+    function confirmFinish() {
+        const unanswered = userAnswers.filter(ans => ans === null).length;
+        let msg = "Apakah Anda yakin ingin menyelesaikan ujian?";
+        if (unanswered > 0) {
+            msg = `Masih ada ${unanswered} soal yang belum dijawab. ` + msg;
+        }
+        if (confirm(msg)) {
+            finishQuiz();
+        }
+    }
+
+    function toggleExplanation(id) {
+        const body = document.getElementById(`exp-body-${id}`);
+        const icon = document.getElementById(`exp-icon-${id}`);
+        if (body.style.display === "block") {
+            body.style.display = "none";
+            icon.innerText = "▼";
+        } else {
+            body.style.display = "block";
+            icon.innerText = "▲";
+        }
+    }
+
+    function finishQuiz() {
+        clearInterval(timerInterval);
+        let score = 0;
+        let expHtml = '';
+        
+        questions.forEach((q, i) => {
+            const isCorrect = userAnswers[i] === q.correct;
+            if (isCorrect) score++;
+            
+            const userChar = userAnswers[i] !== null ? String.fromCharCode(65 + userAnswers[i]) : 'Kosong';
+            const correctChar = String.fromCharCode(65 + q.correct);
+
+            expHtml += `
+                <div class="explanation-item">
+                    <div class="explanation-header" onclick="toggleExplanation(${i})">
+                        <span>Soal ${i+1}: <span class="${isCorrect ? 'badge-correct' : 'badge-wrong'}">${isCorrect ? 'BENAR' : 'SALAH'}</span> (Jawaban Anda: ${userChar} | Kunci: ${correctChar})</span>
+                        <span id="exp-icon-${i}">▼</span>
+                    </div>
+                    <div class="explanation-body" id="exp-body-${i}">
+                        <p><b>Pertanyaan:</b> ${q.q.replace(/\n/g, '<br>')}</p>
+                        <p><b>Kunci Jawaban:</b> ${correctChar}. ${q.a[q.correct]}</p>
+                        <p><b>Pembahasan:</b> ${q.exp.replace(/\n/g, '<br>')}</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        const finalScore = (score / questions.length) * 100;
+
+        document.getElementById('score-text').innerHTML = `Skor Akhir: ${finalScore.toFixed(1)} / 100 (${score} dari ${questions.length} benar)`;
+        document.getElementById('explanation-list').innerHTML = expHtml;
+        document.getElementById('result-area').style.display = 'block';
+        document.getElementById('timer-box').style.display = 'none';
+        
+        // Buka otomatis pembahasan di soal aktif saat selesai
+        document.getElementById('exp-content-current').style.display = 'block';
+        document.getElementById('exp-icon-current').innerText = '▲ Sembunyikan';
+        
+        window.scrollTo({ top: document.getElementById('result-area').offsetTop - 20, behavior: 'smooth' });
+    }
+
+    init();
+</script>
+
+</body>
+</html>
