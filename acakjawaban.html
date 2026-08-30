@@ -1,0 +1,1864 @@
+<!DOCTYPE html><html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBT Biologi Kelas XI - Transpor Membran</title><style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #eef2f7;
+    margin: 0;
+    padding: 15px;
+    color: #2d3748;
+}
+
+.container {
+    max-width: 950px;
+    margin: auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   HALAMAN MULAI
+========================= */
+
+#start-screen {
+    text-align: center;
+    padding: 30px 10px 40px;
+}
+
+.logo-icon {
+    font-size: 55px;
+    margin-bottom: 10px;
+}
+
+#start-screen h1 {
+    margin: 5px 0;
+    color: #2c3e50;
+}
+
+.subtitle {
+    color: #718096;
+    margin-bottom: 30px;
+}
+
+.form-box {
+    max-width: 500px;
+    margin: auto;
+    text-align: left;
+    background: #f8fafc;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e0;
+    border-radius: 7px;
+    font-size: 16px;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #3498db;
+}
+
+.start-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #3498db;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.start-btn:hover {
+    background: #2980b9;
+}
+
+.instruction {
+    max-width: 700px;
+    margin: 25px auto 0;
+    padding: 15px;
+    background: #fff8e1;
+    border: 1px solid #f6d365;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 14px;
+}
+
+/* =========================
+   HEADER CBT
+========================= */
+
+#exam-screen {
+    display: none;
+}
+
+.header-cbt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.header-title h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.header-title small {
+    color: #718096;
+}
+
+#timer-box {
+    background: #e74c3c;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 1.05em;
+    min-width: 125px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+#timer-box.warning {
+    background: #f39c12;
+}
+
+#timer-box.danger {
+    background: #c0392b;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    50% {
+        opacity: 0.65;
+    }
+}
+
+/* =========================
+   INFO SISWA
+========================= */
+
+.student-info {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* =========================
+   PANEL NOMOR
+========================= */
+
+.panel-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.number-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 22px;
+}
+
+.num-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #cbd5e0;
+    background: #f8f9fa;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.num-btn:hover {
+    border-color: #3498db;
+}
+
+.num-btn.active {
+    background: #3498db;
+    color: white;
+    border-color: #2980b9;
+}
+
+.num-btn.filled {
+    background: #2ecc71;
+    color: white;
+    border-color: #27ae60;
+}
+
+.num-btn.active.filled {
+    background: #3498db;
+    border-color: #2980b9;
+}
+
+/* =========================
+   SOAL
+========================= */
+
+.question-area {
+    background: #fff;
+    padding: 22px;
+    border: 1px solid #e1e4e8;
+    border-radius: 10px;
+}
+
+#question-number {
+    color: #3498db;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#question-text {
+    font-size: 17px;
+    line-height: 1.6;
+    margin-top: 0;
+}
+
+.options {
+    list-style: none;
+    padding: 0;
+}
+
+.options li {
+    margin: 12px 0;
+    padding: 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    line-height: 1.5;
+}
+
+.options li:hover {
+    background: #f1f8ff;
+    border-color: #3498db;
+}
+
+.options li.selected {
+    background: #e8f4fc;
+    border-color: #3498db;
+    font-weight: 600;
+}
+
+.options input {
+    margin-right: 12px;
+    margin-top: 4px;
+    transform: scale(1.15);
+    flex-shrink: 0;
+}
+
+/* =========================
+   TABEL
+========================= */
+
+.cbt-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.95em;
+}
+
+.cbt-table th,
+.cbt-table td {
+    border: 1px solid #cbd5e0;
+    padding: 9px;
+    text-align: center;
+}
+
+.cbt-table th {
+    background-color: #edf2f7;
+}
+
+/* =========================
+   PEMBAHASAN
+========================= */
+
+.explanation-box {
+    display: none;
+}
+
+/* =========================
+   NAVIGASI
+========================= */
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+button.nav-btn {
+    padding: 12px 22px;
+    border: none;
+    background: #34495e;
+    color: white;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button.nav-btn:hover {
+    opacity: 0.9;
+}
+
+button.nav-btn:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+}
+
+.finish-btn {
+    background: #e67e22 !important;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status-bar {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #718096;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* =========================
+   HASIL
+========================= */
+
+#result-area {
+    display: none;
+    margin-top: 30px;
+}
+
+.result-card {
+    text-align: center;
+    padding: 25px;
+    background: #eef9f1;
+    border-radius: 12px;
+    border: 1px solid #c3e6cb;
+}
+
+.result-card h2 {
+    margin-top: 0;
+}
+
+.score {
+    font-size: 42px;
+    font-weight: bold;
+    color: #27ae60;
+    margin: 10px 0;
+}
+
+.result-info {
+    margin: 15px auto;
+    max-width: 600px;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.explanation-item {
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 7px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.explanation-header {
+    padding: 13px 15px;
+    background: #f8f9fa;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.explanation-header:hover {
+    background: #edf2f7;
+}
+
+.explanation-body {
+    display: none;
+    padding: 15px;
+    font-size: 0.95em;
+    color: #2d3748;
+    line-height: 1.6;
+    background: #fff;
+}
+
+.badge-correct {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.badge-wrong {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.restart-btn {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border: none;
+    background: #3498db;
+    color: white;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* =========================
+   RESPONSIVE HP
+========================= */
+
+@media (max-width: 650px) {
+
+    body {
+        padding: 8px;
+    }
+
+    .container {
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .header-cbt {
+        align-items: flex-start;
+    }
+
+    .header-title h2 {
+        font-size: 18px;
+    }
+
+    .header-title small {
+        font-size: 12px;
+    }
+
+    #timer-box {
+        font-size: 13px;
+        min-width: 105px;
+        padding: 8px 10px;
+    }
+
+    .question-area {
+        padding: 15px;
+    }
+
+    #question-text {
+        font-size: 16px;
+    }
+
+    .options li {
+        padding: 12px;
+    }
+
+    .num-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .navigation {
+        flex-wrap: wrap;
+    }
+
+    button.nav-btn {
+        flex: 1;
+        padding: 11px 10px;
+        font-size: 13px;
+    }
+
+    .student-info {
+        font-size: 13px;
+    }
+
+    .cbt-table {
+        font-size: 12px;
+    }
+}
+</style></head><body><div class="container"><!-- =========================
+     HALAMAN AWAL
+========================= --><div id="start-screen"><div class="logo-icon">🧬</div>
+
+<h1>CBT BIOLOGI</h1>
+
+<div class="subtitle">
+    Penilaian Sumatif Kelas XI SMA/MA<br>
+    Materi: <b>Transpor Membran Sel</b>
+</div>
+
+<div class="form-box">
+
+    <div class="form-group">
+        <label for="student-name">Nama Peserta Didik</label>
+        <input
+            type="text"
+            id="student-name"
+            placeholder="Masukkan nama lengkap"
+            autocomplete="off"
+        >
+    </div>
+
+    <div class="form-group">
+        <label for="student-class">Kelas</label>
+        <input
+            type="text"
+            id="student-class"
+            placeholder="Contoh: XI IPA 1"
+            autocomplete="off"
+        >
+    </div>
+
+    <button class="start-btn" onclick="startExam()">
+        ▶ MULAI UJIAN
+    </button>
+
+</div>
+
+<div class="instruction">
+    <b>Petunjuk:</b>
+    <ol>
+        <li>Masukkan nama dan kelas dengan benar.</li>
+        <li>Jumlah soal: <b>20 soal</b>.</li>
+        <li>Waktu pengerjaan: <b>4 menit</b>.</li>
+        <li>Pilih satu jawaban yang paling tepat.</li>
+        <li>Gunakan panel nomor untuk berpindah soal.</li>
+        <li>Setelah waktu habis, ujian akan otomatis berakhir.</li>
+        <li>Pembahasan soal dapat dilihat setelah ujian selesai.</li>
+    </ol>
+</div>
+
+</div><!-- =========================
+     HALAMAN UJIAN
+========================= --><div id="exam-screen"><div class="header-cbt">
+
+    <div class="header-title">
+        <h2>Penilaian Sumatif - Biologi</h2>
+        <small>Materi: Transpor Membran Sel</small>
+    </div>
+
+    <div id="timer-box">
+        Sisa Waktu:
+        <span id="timer">04:00</span>
+    </div>
+
+</div>
+
+<div class="student-info">
+    <div>
+        <b>Nama:</b>
+        <span id="display-name"></span>
+    </div>
+
+    <div>
+        <b>Kelas:</b>
+        <span id="display-class"></span>
+    </div>
+</div>
+
+<div class="panel-title">
+    Nomor Soal
+</div>
+
+<div class="number-panel" id="number-panel"></div>
+
+<div class="question-area">
+
+    <div id="question-number"></div>
+
+    <div id="question-text">
+        Memuat soal...
+    </div>
+
+    <div id="extra-question-content"></div>
+
+    <ul class="options" id="options-list"></ul>
+
+</div>
+
+<div class="status-bar">
+    <span id="answer-status">
+        Belum dijawab
+    </span>
+
+    <span id="progress-status">
+        1 / 20
+    </span>
+</div>
+
+<div class="navigation">
+
+    <button
+        class="nav-btn"
+        id="prev-btn"
+        onclick="manualChange(-1)">
+        ← Sebelumnya
+    </button>
+
+    <button
+        class="nav-btn finish-btn"
+        onclick="confirmFinish()">
+        ✓ Selesai
+    </button>
+
+    <button
+        class="nav-btn"
+        id="next-btn"
+        onclick="manualChange(1)">
+        Selanjutnya →
+    </button>
+
+</div>
+
+</div><!-- =========================
+     HASIL
+========================= --><div id="result-area"><div class="result-card">
+
+    <h2>🎉 Ujian Selesai</h2>
+
+    <div class="score" id="score-number">
+        0
+    </div>
+
+    <div id="score-text"></div>
+
+    <div class="result-info">
+
+        <div>
+            <b>Nama:</b>
+            <span id="result-name"></span>
+        </div>
+
+        <div>
+            <b>Kelas:</b>
+            <span id="result-class"></span>
+        </div>
+
+        <div>
+            <b>Jumlah Soal:</b>
+            <span id="result-total"></span>
+        </div>
+
+        <div>
+            <b>Jawaban Benar:</b>
+            <span id="result-correct"></span>
+        </div>
+
+        <div>
+            <b>Jawaban Salah:</b>
+            <span id="result-wrong"></span>
+        </div>
+
+        <div>
+            <b>Tidak Dijawab:</b>
+            <span id="result-empty"></span>
+        </div>
+
+    </div>
+
+</div>
+
+<hr style="border:0;border-top:1px solid #ddd;margin:25px 0;">
+
+<h3>
+    📖 Rekapitulasi & Pembahasan
+</h3>
+
+<p style="font-size:14px;color:#718096;">
+    Klik setiap nomor untuk melihat pertanyaan, jawaban Anda,
+    kunci jawaban, dan pembahasan.
+</p>
+
+<div id="explanation-list"></div>
+
+<div style="text-align:center;">
+    <button
+        class="restart-btn"
+        onclick="restartExam()">
+        🔄 Ulangi Ujian
+    </button>
+</div>
+
+</div></div><script>
+
+/* =====================================================
+   BANK SOAL
+===================================================== */
+
+const originalQuestions = [
+
+{
+q: "Tanaman yang diberi pupuk urea sangat pekat akan menjadi ....",
+a: [
+"subur karena kebutuhan mineralnya terpenuhi",
+"segar karena memperoleh cadangan makanan",
+"tumbuh besar karena kelebihan air",
+"berdaun lebat tapi berwarna pucat",
+"layu karena kehilangan air terlalu banyak"
+],
+correct: 4,
+exp: "Pemberian pupuk urea yang sangat pekat menyebabkan konsentrasi cairan di luar sel akar tanaman menjadi hipertonik terhadap cairan di dalam sel akar. Akibatnya, air dari dalam sel tanaman keluar menuju tanah secara osmosis. Sel kehilangan banyak air dan dapat mengalami plasmolisis sehingga tanaman menjadi layu."
+},
+
+{
+q: "Transpor aktif melibatkan hal-hal berikut, kecuali ....",
+a: [
+"protein membran",
+"protein carrier",
+"ATP enzim",
+"ATP ase",
+"glikolipid"
+],
+correct: 4,
+exp: "Transpor aktif melibatkan protein membran atau protein pembawa serta energi ATP. Glikolipid tidak berperan langsung dalam mekanisme transpor aktif."
+},
+
+{
+q: "Perpindahan zat melalui membran yang memerlukan energi disebut dengan ....",
+a: [
+"transpor pasif",
+"transpor aktif",
+"difusi",
+"osmosis",
+"endositosis"
+],
+correct: 1,
+exp: "Transpor aktif adalah perpindahan zat melalui membran yang membutuhkan energi seluler, biasanya ATP, karena zat dapat dipindahkan melawan gradien konsentrasi."
+},
+
+{
+q: "Perbedaan antara difusi dan osmosis adalah pada difusi ....",
+a: [
+"air berpindah dari larutan hipotonik ke hipertonik",
+"air mengalir dari larutan isotonik ke hipertonik",
+"zat terlarut berpindah dari larutan hipertonik ke larutan hipotonik",
+"zat terlarut berpindah dari larutan hipotonik ke larutan hipertonik",
+"air berpindah dari larutan hipertonik ke hipotonik"
+],
+correct: 2,
+exp: "Difusi adalah perpindahan partikel atau zat terlarut dari konsentrasi tinggi ke rendah. Osmosis merupakan perpindahan air melalui membran semipermeabel dari larutan yang lebih encer menuju larutan yang lebih pekat."
+},
+
+{
+q: "Perbedaan fundamental antara transpor pasif dan transpor aktif dalam konteks pergerakan zat melalui membran sel adalah ....",
+a: [
+"transpor pasif selalu memerlukan energi tambahan, sedangkan transpor aktif tidak",
+"transpor aktif melibatkan pergerakan zat dari area konsentrasi tinggi ke rendah, sedangkan transpor pasif sebaliknya",
+"transpor pasif terjadi melalui protein pembawa, sedangkan transpor aktif melibatkan kanal ion",
+"transpor aktif membutuhkan energi dari sel untuk memindahkan zat melawan gradien konsentrasi, sementara transpor pasif tidak",
+"transpor aktif dan transpor pasif membutuhkan energi dalam proses transpor"
+],
+correct: 3,
+exp: "Transpor aktif membutuhkan energi karena memindahkan zat melawan gradien konsentrasi. Transpor pasif tidak membutuhkan energi seluler dan berlangsung mengikuti gradien konsentrasi."
+},
+
+{
+q: "Peristiwa mengerutnya sel pada sel tumbuhan karena air keluar dari sel disebut ....",
+a: [
+"plasmolisis",
+"hipotonik",
+"hemolisis",
+"endositosis",
+"krenasi"
+],
+correct: 0,
+exp: "Plasmolisis adalah peristiwa ketika air keluar dari sel tumbuhan sehingga membran plasma dan sitoplasma mengerut serta dapat terlepas dari dinding sel."
+},
+
+{
+q: "Jika sel darah merah diletakkan di dalam larutan hipertonik akan menyebabkan peristiwa ....",
+a: [
+"krenasi",
+"plasmolisis",
+"hemolisis",
+"tekanan turgor",
+"lisis"
+],
+correct: 0,
+exp: "Sel darah merah dalam larutan hipertonik kehilangan air melalui osmosis sehingga sel mengerut. Peristiwa ini disebut krenasi."
+},
+
+{
+q: "Pada saat sel-sel epidermis umbi bawang merah direndam dalam akuades maka akan mengalami ....",
+a: [
+"plasmolisis, karena cairan sel bersifat hipotonik sehingga air di dalam sel keluar",
+"lisis, karena cairan sel bersifat hipertonik sehingga molekul-molekul air keluar dari sel",
+"krenasi, karena cairan sel bersifat isotonik sehingga molekul-molekul air keluar dari sel",
+"krenasi, karena cairan sel bersifat hipotonik sehingga molekul-molekul gula masuk ke dalam sel",
+"turgid, karena cairan sel bersifat hipertonik sehingga air dari luar sel masuk ke dalam sel"
+],
+correct: 4,
+exp: "Akuades bersifat hipotonik dibandingkan cairan sel. Air akan masuk ke dalam sel secara osmosis sehingga sel tumbuhan menjadi turgid. Dinding sel membantu mencegah sel pecah."
+},
+
+{
+q: "Perhatikan gambar hasil praktikum peserta didik tentang transpor pasif pada sel tumbuhan berikut! (B adalah sel sebelum diberi perlakuan. A dan C adalah sel yang mendapat perlakuan perendaman pada larutan yang berbeda konsentrasi selama 5 menit.) Penjelasan terhadap peristiwa yang terjadi adalah .... [HOTS]",
+a: [
+"A mengalami plasmolisis karena berada dalam larutan hipertonik sehingga cairan sel berosmosis ke luar sel",
+"A mengalami krenasi karena berada dalam larutan hipotonik sehingga cairan sel berosmosis ke luar sel",
+"C mengalami turgid karena berada dalam larutan hipertonik sehingga cairan sel berosmosis ke luar sel",
+"C mengalami plasmolisis karena berada dalam larutan hipertonik sehingga cairan sel berosmosis ke dalam sel",
+"A mengalami turgid karena berada dalam larutan hipotonik sehingga cairan sel berosmosis ke dalam sel"
+],
+correct: 0,
+exp: "Sel A mengalami plasmolisis karena berada dalam larutan hipertonik sehingga air keluar dari sel. Sel C mengalami kondisi turgid karena air masuk ke dalam sel dalam larutan hipotonik."
+},
+
+{
+q: "Perhatikan beberapa proses perpindahan molekul berikut ini! (1) osmosis (2) pompa ion natrium-kalium (3) difusi (4) endositosis (5) eksositosis. Proses perpindahan molekul yang membutuhkan energi adalah .... [HOTS]",
+a: [
+"(1), (2), dan (3)",
+"(1), (3), dan (4)",
+"(2), (3), dan (4)",
+"(2), (4), dan (5)",
+"(3), (4), dan (5)"
+],
+correct: 3,
+exp: "Pompa ion natrium-kalium, endositosis, dan eksositosis membutuhkan energi. Osmosis dan difusi termasuk transpor pasif."
+},
+
+{
+q: "Sel darah merah yang berada dalam air suling lama-kelamaan akan pecah. Dalam peristiwa tersebut terjadi .... [HOTS]",
+a: [
+"osmosis, karena sel darah merah berada dalam keadaan hipertonik sehingga cairan sel keluar dari sel",
+"difusi, karena sel darah merah berada dalam keadaan hipertonik sehingga cairan sel keluar dari sel",
+"transpor aktif, karena sel darah merah berada dalam larutan hipotonik sehingga cairan sel keluar dari sel",
+"endositosis, karena sel darah merah berada dalam larutan hipertonik sehingga molekul air masuk ke sel",
+"hemolisis, karena sel darah merah berada dalam larutan hipotonik sehingga molekul air masuk ke sel"
+],
+correct: 4,
+exp: "Air suling bersifat hipotonik terhadap cairan sel darah merah. Air masuk ke dalam sel secara osmosis. Karena sel darah merah tidak memiliki dinding sel, sel dapat pecah. Peristiwa ini disebut hemolisis."
+},
+
+{
+q: "Salah satu kondisi yang terjadi pada proses transpor aktif adalah ....",
+a: [
+"mekanismenya memerlukan energi",
+"tidak dipengaruhi oleh muatan listrik",
+"gerakannya berlangsung dua arah",
+"hanya terjadi pada molekul berukuran besar",
+"dibutuhkan protein pembawa partikel"
+],
+correct: 0,
+exp: "Ciri utama transpor aktif adalah membutuhkan energi untuk memindahkan zat, terutama ketika zat bergerak melawan gradien konsentrasi."
+},
+
+{
+q: "Berikut yang bukan termasuk faktor yang mempengaruhi proses difusi adalah ....",
+a: [
+"konsentrasi zat",
+"ukuran zat",
+"suhu",
+"tempat terjadinya difusi",
+"wujud zat"
+],
+correct: 3,
+exp: "Faktor yang memengaruhi difusi antara lain gradien konsentrasi, ukuran partikel, suhu, dan sifat atau wujud zat. Tempat spesifik terjadinya difusi bukan faktor utama yang menentukan laju difusi."
+},
+
+{
+q: "Farid dan teman-temannya melakukan percobaan terhadap sel kentang. Mereka menyiapkan tiga potongan kentang berbentuk silinder dengan ukuran dan massa yang sama. Kentang direndam dalam larutan yang sama, tetapi konsentrasi berbeda. Kesimpulan berdasarkan tabel adalah .... [HOTS]",
+a: [
+"larutan gula hipotonik terhadap cairan sel",
+"larutan gula hipertonik terhadap cairan sel",
+"sel-sel kentang pecah karena masuknya larutan gula",
+"cairan sel isotonik terhadap larutan gula",
+"larutan gula isotonik terhadap cairan sel"
+],
+extraTable: true,
+correct: 1,
+exp: "Massa potongan kentang mengalami pengurangan. Hal tersebut menunjukkan air keluar dari sel kentang menuju larutan gula melalui osmosis. Jadi larutan gula bersifat hipertonik terhadap cairan sel."
+},
+
+{
+q: "Transpor membran yang tergolong transpor pasif adalah ....",
+a: [
+"pinositosis",
+"osmosis",
+"fagositosis",
+"eksositosis",
+"endositosis"
+],
+correct: 1,
+exp: "Osmosis merupakan transpor pasif karena perpindahan air berlangsung mengikuti gradien konsentrasi tanpa menggunakan energi ATP."
+},
+
+{
+q: "Fagositosis berperan pada makhluk hidup uniseluler misalnya ....",
+a: [
+"Amoeba",
+"mammalia",
+"aves",
+"Paramecium",
+"cacing"
+],
+correct: 0,
+exp: "Amoeba menggunakan fagositosis untuk memasukkan partikel makanan berukuran relatif besar dengan bantuan pseudopodia."
+},
+
+{
+q: "Peristiwa yang akan terjadi apabila sel hewan diletakkan dalam medium yang bersifat hipertonik adalah ....",
+a: [
+"plasmolisis karena plasma sel akan keluar",
+"plasmolisis karena air di dalam sel akan keluar",
+"krenasi karena air dalam sel akan keluar sel",
+"lisis karena air di luar sel akan masuk ke dalam sel",
+"tekanan turgor meningkat dan akan terjadi lisis"
+],
+correct: 2,
+exp: "Pada medium hipertonik, air keluar dari sel hewan secara osmosis sehingga sel mengerut. Peristiwa tersebut disebut krenasi."
+},
+
+{
+q: "Sel hewan dan sel tumbuhan memerlukan ion K+ untuk aktivitas hidupnya. Pemasukan ion K+ ke dalam sel dilakukan secara .... [HOTS]",
+a: [
+"difusi",
+"fagositosis",
+"osmosis",
+"pinositosis",
+"transpor aktif"
+],
+correct: 4,
+exp: "Ion K+ dapat dipindahkan ke dalam sel melalui mekanisme transpor aktif yang menggunakan energi dan melibatkan protein membran."
+},
+
+{
+q: "Perpindahan molekul atau ion tanpa menggunakan energi sel. Perpindahan molekul tersebut terjadi secara spontan dari konsentrasi tinggi ke rendah disebut ....",
+a: [
+"endositosis",
+"eksositosis",
+"transpor aktif",
+"transpor langsung",
+"transpor pasif"
+],
+correct: 4,
+exp: "Transpor pasif adalah perpindahan zat tanpa menggunakan energi seluler dan berlangsung mengikuti gradien konsentrasi."
+},
+
+{
+q: "Perpindahan molekul-molekul dari konsentrasi tinggi ke konsentrasi rendah baik melalui membran plasma ataupun tidak disebut ....",
+a: [
+"endositosis",
+"eksositosis",
+"transpor aktif",
+"difusi",
+"osmosis"
+],
+correct: 3,
+exp: "Difusi adalah perpindahan partikel dari daerah berkonsentrasi tinggi ke daerah berkonsentrasi rendah."
+}
+
+];
+
+
+/* =====================================================
+   VARIABEL UJIAN
+===================================================== */
+
+let questions = [];
+let currentIdx = 0;
+let userAnswers = [];
+let timeLeft = 240;
+let timerInterval = null;
+let examStarted = false;
+let examFinished = false;
+
+
+/* =====================================================
+   FUNGSI ACAK
+===================================================== */
+
+function shuffleArray(array) {
+
+    const arr = [...array];
+
+    for (let i = arr.length - 1; i > 0; i--) {
+
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+
+    return arr;
+}
+
+
+/* =====================================================
+   MULAI UJIAN
+===================================================== */
+
+function startExam() {
+
+    const name =
+        document.getElementById("student-name").value.trim();
+
+    const studentClass =
+        document.getElementById("student-class").value.trim();
+
+    if (!name) {
+        alert("Silakan masukkan nama peserta didik.");
+        document.getElementById("student-name").focus();
+        return;
+    }
+
+    if (!studentClass) {
+        alert("Silakan masukkan kelas.");
+        document.getElementById("student-class").focus();
+        return;
+    }
+
+
+    if (
+        !confirm(
+            "Ujian akan dimulai sekarang.\n\n" +
+            "Waktu pengerjaan: 4 menit.\n" +
+            "Pastikan Anda sudah siap."
+        )
+    ) {
+        return;
+    }
+
+
+    questions = originalQuestions.map(q => {
+
+        const optionObjects =
+            q.a.map((text, index) => ({
+                text: text,
+                originalIndex: index
+            }));
+
+        const shuffledOptions =
+            shuffleArray(optionObjects);
+
+        const newCorrect =
+            shuffledOptions.findIndex(
+                option => option.originalIndex === q.correct
+            );
+
+        return {
+            q: q.q,
+            a: shuffledOptions.map(option => option.text),
+            correct: newCorrect,
+            exp: q.exp,
+            extraTable: q.extraTable || false
+        };
+
+    });
+
+
+    /*
+       Soal juga diacak.
+    */
+
+    questions = shuffleArray(questions);
+
+
+    userAnswers =
+        new Array(questions.length).fill(null);
+
+    currentIdx = 0;
+    timeLeft = 240;
+    examStarted = true;
+    examFinished = false;
+
+
+    document.getElementById("display-name").innerText = name;
+    document.getElementById("display-class").innerText = studentClass;
+
+
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("exam-screen").style.display = "block";
+    document.getElementById("result-area").style.display = "none";
+
+
+    renderPanel();
+    showQuestion();
+    startTimer();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function startTimer() {
+
+    clearInterval(timerInterval);
+
+    updateTimerDisplay();
+
+    timerInterval = setInterval(() => {
+
+        if (!examStarted || examFinished) {
+            clearInterval(timerInterval);
+            return;
+        }
+
+        timeLeft--;
+
+        updateTimerDisplay();
+
+        if (timeLeft <= 0) {
+
+            clearInterval(timerInterval);
+
+            alert(
+                "Waktu ujian telah habis.\n" +
+                "Jawaban akan dikumpulkan secara otomatis."
+            );
+
+            finishQuiz(true);
+        }
+
+    }, 1000);
+}
+
+
+function updateTimerDisplay() {
+
+    const minutes =
+        Math.floor(timeLeft / 60);
+
+    const seconds =
+        timeLeft % 60;
+
+
+    document.getElementById("timer").innerText =
+        `${minutes.toString().padStart(2, "0")}:${seconds
+            .toString()
+            .padStart(2, "0")}`;
+
+
+    const box =
+        document.getElementById("timer-box");
+
+
+    box.classList.remove(
+        "warning",
+        "danger"
+    );
+
+
+    if (timeLeft <= 30) {
+        box.classList.add("danger");
+    }
+    else if (timeLeft <= 60) {
+        box.classList.add("warning");
+    }
+}
+
+
+/* =====================================================
+   TAMPILKAN SOAL
+===================================================== */
+
+function showQuestion() {
+
+    const q = questions[currentIdx];
+
+    document.getElementById("question-number").innerText =
+        `SOAL ${currentIdx + 1} DARI ${questions.length}`;
+
+
+    document.getElementById("question-text").innerText =
+        q.q;
+
+
+    /*
+       Tabel soal nomor tertentu
+    */
+
+    const extraDiv =
+        document.getElementById(
+            "extra-question-content"
+        );
+
+
+    if (q.extraTable) {
+
+        extraDiv.innerHTML = `
+
+        <table class="cbt-table">
+
+            <thead>
+
+                <tr>
+                    <th>No.</th>
+                    <th>Larutan Gula (%)</th>
+                    <th>Berkurangnya Massa Kentang (gram)</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>1.</td>
+                    <td>5</td>
+                    <td>0,5</td>
+                </tr>
+
+                <tr>
+                    <td>2.</td>
+                    <td>10</td>
+                    <td>0,9</td>
+                </tr>
+
+                <tr>
+                    <td>3.</td>
+                    <td>15</td>
+                    <td>1,8</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        `;
+
+    }
+    else {
+
+        extraDiv.innerHTML = "";
+
+    }
+
+
+    /*
+       Pilihan jawaban
+    */
+
+    const list =
+        document.getElementById(
+            "options-list"
+        );
+
+    list.innerHTML = "";
+
+
+    q.a.forEach((opt, i) => {
+
+        const li =
+            document.createElement("li");
+
+
+        const char =
+            String.fromCharCode(65 + i);
+
+
+        const isSelected =
+            userAnswers[currentIdx] === i;
+
+
+        if (isSelected) {
+            li.classList.add("selected");
+        }
+
+
+        li.innerHTML = `
+
+            <input
+                type="radio"
+                name="option"
+                ${isSelected ? "checked" : ""}
+            >
+
+            <span>
+                <b>${char}.</b> ${opt}
+            </span>
+
+        `;
+
+
+        li.onclick = () => {
+            saveAnswer(i);
+        };
+
+
+        list.appendChild(li);
+
+    });
+
+
+    /*
+       Status
+    */
+
+    const answered =
+        userAnswers[currentIdx] !== null;
+
+
+    document.getElementById("answer-status").innerText =
+        answered
+        ? "✓ Soal sudah dijawab"
+        : "○ Soal belum dijawab";
+
+
+    document.getElementById("progress-status").innerText =
+        `${currentIdx + 1} / ${questions.length}`;
+
+
+    /*
+       Tombol navigasi
+    */
+
+    document.getElementById("prev-btn").disabled =
+        currentIdx === 0;
+
+
+    document.getElementById("next-btn").disabled =
+        currentIdx === questions.length - 1;
+
+
+    renderPanel();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =====================================================
+   SIMPAN JAWABAN
+===================================================== */
+
+function saveAnswer(index) {
+
+    if (!examStarted || examFinished) {
+        return;
+    }
+
+    userAnswers[currentIdx] = index;
+
+    showQuestion();
+}
+
+
+/* =====================================================
+   NAVIGASI
+===================================================== */
+
+function manualChange(step) {
+
+    if (!examStarted || examFinished) {
+        return;
+    }
+
+    const newIndex =
+        currentIdx + step;
+
+
+    if (
+        newIndex < 0 ||
+        newIndex >= questions.length
+    ) {
+        return;
+    }
+
+
+    currentIdx = newIndex;
+
+    showQuestion();
+}
+
+
+/* =====================================================
+   PANEL NOMOR
+===================================================== */
+
+function renderPanel() {
+
+    const panel =
+        document.getElementById(
+            "number-panel"
+        );
+
+    panel.innerHTML = "";
+
+
+    questions.forEach((_, i) => {
+
+        const btn =
+            document.createElement("button");
+
+
+        btn.innerText = i + 1;
+
+        btn.className =
+            "num-btn";
+
+
+        if (i === currentIdx) {
+            btn.classList.add("active");
+        }
+
+
+        if (userAnswers[i] !== null) {
+            btn.classList.add("filled");
+        }
+
+
+        btn.onclick = () => {
+
+            if (!examStarted || examFinished) {
+                return;
+            }
+
+            currentIdx = i;
+
+            showQuestion();
+
+        };
+
+
+        panel.appendChild(btn);
+
+    });
+}
+
+
+/* =====================================================
+   KONFIRMASI SELESAI
+===================================================== */
+
+function confirmFinish() {
+
+    if (!examStarted || examFinished) {
+        return;
+    }
+
+
+    const unanswered =
+        userAnswers.filter(
+            answer => answer === null
+        ).length;
+
+
+    let message =
+        "Apakah Anda yakin ingin menyelesaikan ujian?";
+
+
+    if (unanswered > 0) {
+
+        message =
+            `Masih ada ${unanswered} soal yang belum dijawab.\n\n` +
+            "Apakah Anda tetap ingin menyelesaikan ujian?";
+
+    }
+
+
+    if (confirm(message)) {
+
+        finishQuiz(false);
+
+    }
+}
+
+
+/* =====================================================
+   SELESAI UJIAN
+===================================================== */
+
+function finishQuiz(autoFinish = false) {
+
+    if (examFinished) {
+        return;
+    }
+
+
+    examFinished = true;
+    examStarted = false;
+
+
+    clearInterval(timerInterval);
+
+
+    let score = 0;
+    let unanswered = 0;
+
+
+    let expHtml = "";
+
+
+    questions.forEach((q, i) => {
+
+        const answer =
+            userAnswers[i];
+
+
+        const isCorrect =
+            answer === q.correct;
+
+
+        if (isCorrect) {
+            score++;
+        }
+
+
+        if (answer === null) {
+            unanswered++;
+        }
+
+
+        const userChar =
+            answer !== null
+            ? String.fromCharCode(65 + answer)
+            : "Kosong";
+
+
+        const correctChar =
+            String.fromCharCode(
+                65 + q.correct
+            );
+
+
+        const status =
+            isCorrect
+            ? "BENAR"
+            : "SALAH";
+
+
+        const statusClass =
+            isCorrect
+            ? "badge-correct"
+            : "badge-wrong";
+
+
+        expHtml += `
+
+        <div class="explanation-item">
+
+            <div
+                class="explanation-header"
+                onclick="toggleExplanation(${i})"
+            >
+
+                <span>
+
+                    Soal ${i + 1}:
+
+                    <span class="${statusClass}">
+                        ${status}
+                    </span>
+
+                    <br>
+
+                    <small>
+                        Jawaban Anda:
+                        ${userChar}
+                        |
+                        Kunci:
+                        ${correctChar}
+                    </small>
+
+                </span>
+
+                <span id="exp-icon-${i}">
+                    ▼
+                </span>
+
+            </div>
+
+
+            <div
+                class="explanation-body"
+                id="exp-body-${i}"
+            >
+
+                <p>
+                    <b>Pertanyaan:</b><br>
+                    ${q.q.replace(/\n/g, "<br>")}
+                </p>
+
+                ${
+                    q.extraTable
+                    ? `
+                    <table class="cbt-table">
+
+                        <tr>
+                            <th>No.</th>
+                            <th>Larutan Gula (%)</th>
+                            <th>Berkurangnya Massa Kentang (gram)</th>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td>5</td>
+                            <td>0,5</td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>10</td>
+                            <td>0,9</td>
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td>15</td>
+                            <td>1,8</td>
+                        </tr>
+
+                    </table>
+                    `
+                    : ""
+                }
+
+
+                <p>
+                    <b>Jawaban Anda:</b>
+                    ${
+                        answer !== null
+                        ? `${userChar}. ${q.a[answer]}`
+                        : "Tidak dijawab"
+                    }
+                </p>
+
+
+                <p>
+                    <b>Kunci Jawaban:</b>
+                    ${correctChar}. ${q.a[q.correct]}
+                </p>
+
+
+                <p>
+                    <b>Pembahasan:</b><br>
+                    ${q.exp.replace(/\n/g, "<br>")}
+                </p>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+
+    const wrong =
+        questions.length -
+        score -
+        unanswered;
+
+
+    const finalScore =
+        (score / questions.length) * 100;
+
+
+    /*
+       Identitas
+    */
+
+    document.getElementById("result-name").innerText =
+        document.getElementById("student-name").value;
+
+
+    document.getElementById("result-class").innerText =
+        document.getElementById("student-class").value;
+
+
+    document.getElementById("result-total").innerText =
+        questions.length;
+
+
+    document.getElementById("result-correct").innerText =
+        score;
+
+
+    document.getElementById("result-wrong").innerText =
+        wrong;
+
+
+    document.getElementById("result-empty").innerText =
+        unanswered;
+
+
+    document.getElementById("score-number").innerText =
+        finalScore.toFixed(1);
+
+
+    document.getElementById("score-text").innerHTML =
+        `
+        <b>${score}</b> dari
+        <b>${questions.length}</b> soal benar
+        <br>
+        ${
+            autoFinish
+            ? "Ujian berakhir karena waktu habis."
+            : "Ujian telah dikumpulkan."
+        }
+        `;
+
+
+    document.getElementById(
+        "explanation-list"
+    ).innerHTML = expHtml;
+
+
+    document.getElementById(
+        "exam-screen"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "result-area"
+    ).style.display = "block";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =====================================================
+   PEMBAHASAN
+===================================================== */
+
+function toggleExplanation(id) {
+
+    const body =
+        document.getElementById(
+            `exp-body-${id}`
+        );
+
+
+    const icon =
+        document.getElementById(
+            `exp-icon-${id}`
+        );
+
+
+    if (body.style.display === "block") {
+
+        body.style.display = "none";
+
+        icon.innerText = "▼";
+
+    }
+    else {
+
+        body.style.display = "block";
+
+        icon.innerText = "▲";
+
+    }
+
+}
+
+
+/* =====================================================
+   ULANGI UJIAN
+===================================================== */
+
+function restartExam() {
+
+    if (
+        !confirm(
+            "Apakah Anda ingin mengulang ujian?"
+        )
+    ) {
+        return;
+    }
+
+
+    clearInterval(timerInterval);
+
+
+    examStarted = false;
+    examFinished = false;
+
+
+    questions = [];
+    userAnswers = [];
+    currentIdx = 0;
+    timeLeft = 240;
+
+
+    document.getElementById(
+        "result-area"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "exam-screen"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "start-screen"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "student-name"
+    ).value = "";
+
+
+    document.getElementById(
+        "student-class"
+    ).value = "";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+</script></body>
+</html>
