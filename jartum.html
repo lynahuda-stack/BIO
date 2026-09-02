@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT - Struktur & Fungsi Jaringan Tumbuhan</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        
+        .header-cbt { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #27ae60; padding-bottom: 15px; margin-bottom: 20px; }
+        #timer-box { background: #e74c3c; color: white; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 1.1em; }
+        
+        .number-panel { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
+        .num-btn { width: 40px; height: 40px; border: 1px solid #ddd; background: #f8f9fa; cursor: pointer; border-radius: 6px; font-weight: 600; }
+        .num-btn.active { background: #27ae60; color: white; border-color: #1e8449; }
+        .num-btn.filled { border: 2px solid #27ae60; color: #27ae60; }
+
+        .question-area { background: #fff; padding: 20px; border: 1px solid #e1e4e8; border-radius: 8px; min-height: 250px; }
+        .options { list-style: none; padding: 0; }
+        .options li { margin: 12px 0; padding: 15px; border: 1px solid #edeff2; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; }
+        .options li:hover { background: #f0fff4; border-color: #27ae60; }
+        .options li.selected { background: #e8f8f5; border-color: #27ae60; font-weight: bold; }
+        .options input { margin-right: 15px; transform: scale(1.2); pointer-events: none; }
+
+        .navigation { display: flex; justify-content: space-between; margin-top: 30px; gap: 10px; }
+        button.nav-btn { padding: 12px 25px; border: none; background: #34495e; color: white; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; }
+        button.nav-btn:hover { opacity: 0.9; }
+        button.nav-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
+        
+        #result-area { display: none; margin-top: 30px; padding: 20px; background: #fdfefe; border-radius: 8px; border: 2px solid #2ecc71; }
+        .final-score { font-size: 3em; color: #27ae60; text-align: center; font-weight: bold; margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-cbt">
+        <div>
+            <h2 style="margin:0;">Ujian Biologi Tumbuhan</h2>
+            <small>Materi: Struktur & Fungsi Jaringan Tumbuhan (Meristem & Permanen)</small>
+        </div>
+        <div id="timer-box">Sisa Waktu: <span id="timer">04:00</span></div>
+    </div>
+    
+    <div class="number-panel" id="number-panel"></div>
+
+    <div class="question-area" id="question-container">
+        <h3 id="question-text">Memuat soal...</h3>
+        <ul class="options" id="options-list"></ul>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="manualChange(-1)">Sebelumnya</button>
+        <button class="nav-btn" style="background: #27ae60;" onclick="confirmFinish()">Selesai Ujian</button>
+        <button class="nav-btn" id="next-btn" onclick="manualChange(1)">Selanjutnya</button>
+    </div>
+
+    <div id="result-area">
+        <h3 style="text-align:center;">Hasil Ujian</h3>
+        <div class="final-score" id="score-val">0</div>
+        <p><strong>Kunci Jawaban:</strong></p>
+        <div id="key-list" style="columns: 2; line-height: 2;"></div>
+        <button class="nav-btn" style="margin-top:20px; width:100%;" onclick="location.reload()">Ulangi Ujian</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { 
+            q: "Jaringan tumbuhan yang sel-selnya aktif membelah secara mitosis dan belum mengalami diferensiasi dinamakan...", 
+            a: ["Jaringan parenkim", "Jaringan meristem", "Jaringan sklerenkim", "Jaringan epidermis", "Jaringan floem"], 
+            correct: 1 
+        },
+        { 
+            q: "Tumbuhan dapat bertambah tinggi dan akar dapat menembus tanah lebih dalam karena adanya aktivitas dari meristem...", 
+            a: ["Lateral", "Interkalar", "Apikal", "Sekunder", "Kambium pembuluh"], 
+            correct: 2 
+        },
+        { 
+            q: "Pertumbuhan diameter batang pada tumbuhan dikotil hingga menjadi lebih besar disebabkan oleh aktivitas...", 
+            a: ["Meristem apikal", "Meristem primer", "Kambium vascular/lateral", "Promeristem", "Protoderm"], 
+            correct: 2 
+        },
+        { 
+            q: "Ciri utama dari jaringan permanen (jaringan dewasa) yang membedakannya dari jaringan meristem adalah...", 
+            a: ["Sel-selnya terus aktif membelah", "Memiliki sitoplasma yang sangat pekat", "Sel-sel telah mengalami diferensiasi dan spesialisasi fungsi", "Dinding selnya selalu sangat tipis", "Vakuola selnya berukuran sangat kecil atau tidak ada"], 
+            correct: 2 
+        },
+        { 
+            q: "Jaringan luar yang berfungsi melindungi jaringan di dalamnya dari kehilangan air dan kerusakan mekanis adalah...", 
+            a: ["Parenkim", "Epidermis", "Kolenkim", "Sklerenkim", "Xilem"], 
+            correct: 1 
+        },
+        { 
+            q: "Jaringan dasar yang berfungsi sebagai tempat penyimpanan cadangan makanan, tempat fotosintesis (klorenkim), serta mengisi sebagian besar organ tumbuhan adalah...", 
+            a: ["Jaringan epidermis", "Jaringan parenkim", "Jaringan sklerenkim", "Jaringan xilem", "Jaringan floem"], 
+            correct: 1 
+        },
+        { 
+            q: "Tumbuhan yang masih muda atau organ tumbuhan yang lunak disokong oleh jaringan penguat yang sel-selnya mengalami penebalan dinding sel tidak merata dari bahan selulosa. Jaringan tersebut adalah...", 
+            a: ["Sklerenkim", "Kolenkim", "Sklereid", "Xilem", "Gabus"], 
+            correct: 1 
+        },
+        { 
+            q: "Batang tempurung kelapa atau sel-sel batu (sklereid) pada buah pir memiliki struktur yang sangat keras. Hal ini disebabkan oleh penebalan dinding sel secara merata oleh senyawa...", 
+            a: ["Pektin", "Selulosa", "Lignin", "Hemiselulosa", "Suberin"], 
+            correct: 2 
+        },
+        { 
+            q: "Komponen jaringan pengangkut yang berfungsi mengangkut air dan garam mineral dari dalam tanah menuju ke daun adalah...", 
+            a: ["Floem", "Parenkim floem", "Pembuluh tapis", "Xilem", "Sel pengiring"], 
+            correct: 3 
+        },
+        { 
+            q: "Hasil fotosintesis yang terjadi di daun akan diedarkan ke seluruh bagian tumbuhan melalui jaringan...", 
+            a: ["Xilem", "Parenkim palisade", "Floem", "Epidermis", "Kambium"], 
+            correct: 2 
+        }
+    ];
+
+    let currentIdx = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+    let timeLeft = 240; 
+    let timerInterval;
+
+    function init() {
+        renderPanel();
+        showQuestion();
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = 240; 
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+            if (timeLeft <= 0) autoNext();
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        document.getElementById('timer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function showQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('question-text').innerText = `Soal ${currentIdx + 1}: ${q.q}`;
+        const list = document.getElementById('options-list');
+        list.innerHTML = '';
+        
+        q.a.forEach((opt, i) => {
+            const li = document.createElement('li');
+            if (userAnswers[currentIdx] === i) li.className = 'selected';
+            const char = String.fromCharCode(65 + i);
+            li.innerHTML = `<input type="radio" name="opt" ${userAnswers[currentIdx] === i ? 'checked' : ''}> ${char}. ${opt}`;
+            li.onclick = () => saveAnswer(i);
+            list.appendChild(li);
+        });
+
+        document.getElementById('prev-btn').disabled = currentIdx === 0;
+        document.getElementById('next-btn').disabled = currentIdx === questions.length - 1;
+        renderPanel();
+    }
+
+    function saveAnswer(i) {
+        userAnswers[currentIdx] = i;
+        showQuestion();
+    }
+
+    function manualChange(step) {
+        currentIdx += step;
+        showQuestion();
+        startTimer();
+    }
+
+    function autoNext() {
+        if (currentIdx < questions.length - 1) manualChange(1);
+        else finishQuiz();
+    }
+
+    function renderPanel() {
+        const panel = document.getElementById('number-panel');
+        panel.innerHTML = '';
+        questions.forEach((_, i) => {
+            const btn = document.createElement('button');
+            btn.innerText = i + 1;
+            btn.className = `num-btn ${i === currentIdx ? 'active' : ''} ${userAnswers[i] !== null ? 'filled' : ''}`;
+            btn.onclick = () => { currentIdx = i; showQuestion(); startTimer(); };
+            panel.appendChild(btn);
+        });
+    }
+
+    function confirmFinish() {
+        if(confirm("Selesaikan ujian sekarang?")) finishQuiz();
+    }
+
+    function finishQuiz() {
+        clearInterval(timerInterval);
+        let score = 0;
+        let keyHtml = '';
+        
+        questions.forEach((q, i) => {
+            if(userAnswers[i] === q.correct) score++;
+            keyHtml += `<div>Soal ${i+1}: <b>${String.fromCharCode(65 + q.correct)}</b></div>`;
+        });
+
+        document.getElementById('score-val').innerText = (score/questions.length)*100;
+        document.getElementById('key-list').innerHTML = keyHtml;
+        document.getElementById('question-container').style.display = 'none';
+        document.querySelector('.navigation').style.display = 'none';
+        document.getElementById('number-panel').style.display = 'none';
+        document.getElementById('timer-box').style.display = 'none';
+        document.getElementById('result-area').style.display = 'block';
+    }
+
+    init();
+</script>
+</body>
+</html>
