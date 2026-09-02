@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistem Perizinan Keluar Masuk Siswa</title>
+  <!-- Library SheetJS untuk Export Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -28,6 +30,17 @@
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-bottom: 25px;
+    }
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .table-header h3 {
+      margin: 0;
     }
     .form-group {
       margin-bottom: 15px;
@@ -71,6 +84,22 @@
       margin-top: 5px;
       display: none;
     }
+    .btn-excel {
+      background-color: #1d6f42;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-excel:hover {
+      background-color: #155231;
+    }
     .table-container {
       overflow-x: auto;
     }
@@ -100,14 +129,12 @@
       color: #28a745;
       font-weight: bold;
     }
-    /* Tombol Aksi */
     .btn-action {
       border: none;
       padding: 6px 10px;
       border-radius: 4px;
       cursor: pointer;
       font-size: 12px;
-      margin-right: 2px;
     }
     .btn-kembali { background-color: #007bff; color: white; }
     .btn-kembali:hover { background-color: #0056b3; }
@@ -142,18 +169,18 @@
         <label for="kelas">Kelas</label>
         <select id="kelas" required>
           <option value="">-- Pilih Kelas --</option>
-          <option value="X-1">X-1</option>
-          <option value="X-2">X-2</option>
-          <option value="X-3">X-3</option>
-          <option value="X-4">X-4</option>
-          <option value="XI-1">XI-1</option>
-          <option value="XI-2">XI-2</option>
-          <option value="XI-3">XI-3</option>
-          <option value="XI-4">XI-4</option>
-          <option value="XII-1">XII-1</option>
-          <option value="XII-2">XII-2</option>
-          <option value="XII-3">XII-3</option>
-          <option value="XII-4">XII-4</option>
+          <option value="X.1">X.1</option>
+          <option value="X.2">X.2</option>
+          <option value="X.3">X.3</option>
+          <option value="X.4">X.4</option>
+          <option value="XI.1">XI.1</option>
+          <option value="XI.2">XI.2</option>
+          <option value="XI.3">XI.3</option>
+          <option value="XI.4">XI.4</option>
+          <option value="XII.1">XII.1</option>
+          <option value="XII.2">XII.2</option>
+          <option value="XII.3">XII.3</option>
+          <option value="XII.4">XII.4</option>
         </select>
       </div>
 
@@ -174,7 +201,10 @@
 
   <!-- Tabel Rekap Data -->
   <div class="card">
-    <h3>Rekapitulasi Izin Siswa</h3>
+    <div class="table-header">
+      <h3>Rekapitulasi Izin Siswa</h3>
+      <button class="btn-excel" onclick="exportToExcel()">📊 Ekstrak ke Excel (.xlsx)</button>
+    </div>
     <div class="table-container">
       <table>
         <thead>
@@ -216,7 +246,7 @@
     document.getElementById('waktuKeluar').value = jamSekarang;
   }
 
-  // Handle Form Submit (Bisa untuk Simpan Baru maupun Update Edit)
+  // Handle Form Submit
   izinForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -229,7 +259,6 @@
     let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
 
     if (id) {
-      // Modus EDIT: Update data lama
       listIzin = listIzin.map(item => {
         if (item.id == id) {
           return { ...item, nama, kelas, alasan, waktuKeluar };
@@ -237,7 +266,6 @@
         return item;
       });
     } else {
-      // Modus BARU: Tambah data baru
       const dataIzin = {
         id: Date.now(),
         tanggal: new Date().toLocaleDateString('id-ID'),
@@ -309,7 +337,7 @@
     loadData();
   }
 
-  // FITUR EDIT: Isi form dengan data yang dipilih
+  // FITUR EDIT
   function editData(id) {
     let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
     const item = listIzin.find(data => data.id === id);
@@ -328,7 +356,7 @@
     }
   }
 
-  // FITUR HAPUS: Menghapus baris data
+  // FITUR HAPUS
   function hapusData(id) {
     if (confirm("Apakah Anda yakin ingin menghapus data perizinan ini?")) {
       let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
@@ -338,7 +366,7 @@
     }
   }
 
-  // Reset Form ke keadaan semula (Tambah Baru)
+  // Reset Form
   function resetForm() {
     izinForm.reset();
     editIdInput.value = '';
@@ -346,6 +374,48 @@
     btnSubmit.textContent = "Simpan Izin Keluar";
     btnCancel.style.display = "none";
     setDefaultWaktuKeluar();
+  }
+
+  // FITUR EKSTRAK KE EXCEL (.XLSX)
+  function exportToExcel() {
+    let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
+
+    if (listIzin.length === 0) {
+      alert("Tidak ada data untuk diekstrak!");
+      return;
+    }
+
+    // Format data untuk Excel
+    const dataExcel = listIzin.map((item, index) => ({
+      "No": index + 1,
+      "Tanggal": item.tanggal,
+      "Nama Siswa": item.nama,
+      "Kelas": item.kelas,
+      "Alasan Keluar": item.alasan,
+      "Waktu Keluar": item.waktuKeluar,
+      "Waktu Kembali": item.waktuKembali
+    }));
+
+    // Buat worksheet dan workbook Excel
+    const worksheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Izin Siswa");
+
+    // Atur lebar kolom otomatis
+    const max_width = dataExcel.reduce((w, r) => Math.max(w, r["Nama Siswa"].length), 12);
+    worksheet["!cols"] = [
+      { wch: 5 },  // No
+      { wch: 12 }, // Tanggal
+      { wch: max_width + 5 }, // Nama
+      { wch: 10 }, // Kelas
+      { wch: 25 }, // Alasan
+      { wch: 15 }, // Waktu Keluar
+      { wch: 15 }  // Waktu Kembali
+    ];
+
+    // Unduh File Excel dengan nama berformat tanggal
+    const today = new Date().toISOString().split('T')[0];
+    XLSX.writeFile(workbook, `Rekap_Izin_Siswa_${today}.xlsx`);
   }
 </script>
 
