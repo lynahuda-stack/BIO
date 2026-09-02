@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Perizinan Keluar Masuk Siswa</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #f4f7f6;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .card {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="text"], select, textarea, input[type="time"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .btn-submit {
+      background-color: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .btn-submit:hover {
+      background-color: #218838;
+    }
+    .table-container {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background-color: white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .status-keluar {
+      color: #dc3545;
+      font-weight: bold;
+    }
+    .status-kembali {
+      color: #28a745;
+      font-weight: bold;
+    }
+    .btn-kembali {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-kembali:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Sistem Perizinan Keluar Masuk Siswa</h2>
+  
+  <!-- Formulir Input -->
+  <div class="card">
+    <form id="izinForm">
+      <div class="form-group">
+        <label for="nama">Nama Siswa</label>
+        <input type="text" id="nama" placeholder="Masukkan nama siswa" required>
+      </div>
+
+      <div class="form-group">
+        <label for="kelas">Kelas</label>
+        <select id="kelas" required>
+          <option value="">-- Pilih Kelas --</option>
+          <option value="X-1">X-1</option>
+          <option value="X-2">X-2</option>
+          <option value="XI-IPA 1">XI-IPA 1</option>
+          <option value="XI-IPS 1">XI-IPS 1</option>
+          <option value="XII-IPA 1">XII-IPA 1</option>
+          <option value="XII-IPS 1">XII-IPS 1</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="alasan">Alasan Keluar</label>
+        <textarea id="alasan" rows="3" placeholder="Alasan meninggalkan area sekolah" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="waktuKeluar">Waktu Keluar</label>
+        <input type="time" id="waktuKeluar" required>
+      </div>
+
+      <button type="submit" class="btn-submit">Simpan Izin Keluar</button>
+    </form>
+  </div>
+
+  <!-- Tabel Rekap Data -->
+  <div class="card">
+    <h3>Rekapitulasi Izin Siswa</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Tanggal</th>
+            <th>Nama Siswa</th>
+            <th>Kelas</th>
+            <th>Alasan</th>
+            <th>Waktu Keluar</th>
+            <th>Waktu Kembali</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tabelData">
+          <!-- Data otomatis muncul di sini -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Ambil elemen dari HTML
+  const izinForm = document.getElementById('izinForm');
+  const tabelData = document.getElementById('tabelData');
+
+  // Muat data dari LocalStorage saat halaman pertama dibuka
+  document.addEventListener('DOMContentLoaded', loadData);
+
+  // Otomatis isi Waktu Keluar dengan jam sekarang
+  const skrg = new Date();
+  const jamSekarang = String(skrg.getHours()).padStart(2, '0') + ':' + String(skrg.getMinutes()).padStart(2, '0');
+  document.getElementById('waktuKeluar').value = jamSekarang;
+
+  // Tangani Submit Form
+  izinForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const nama = document.getElementById('nama').value;
+    const kelas = document.getElementById('kelas').value;
+    const alasan = document.getElementById('alasan').value;
+    const waktuKeluar = document.getElementById('waktuKeluar').value;
+
+    const dataIzin = {
+      id: Date.now(),
+      tanggal: new Date().toLocaleDateString('id-ID'),
+      nama: nama,
+      kelas: kelas,
+      alasan: alasan,
+      waktuKeluar: waktuKeluar,
+      waktuKembali: '-'
+    };
+
+    simpanKeLocalStorage(dataIzin);
+    izinForm.reset();
+    document.getElementById('waktuKeluar').value = jamSekarang; // Reset jam
+    loadData();
+  });
+
+  // Fungsi simpan data ke LocalStorage browser
+  function simpanKeLocalStorage(data) {
+    let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
+    listIzin.push(data);
+    localStorage.setItem('listIzinSiswa', JSON.stringify(listIzin));
+  }
+
+  // Fungsi menampilkan data ke tabel
+  function loadData() {
+    tabelData.innerHTML = '';
+    let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
+
+    if (listIzin.length === 0) {
+      tabelData.innerHTML = '<tr><td colspan="8" style="text-align:center;">Belum ada data perizinan.</td></tr>';
+      return;
+    }
+
+    listIzin.forEach((item, index) => {
+      const tr = document.createElement('tr');
+      
+      const aksiButton = item.waktuKembali === '-' 
+        ? `<button class="btn-kembali" onclick="catatKembali(${item.id})">Set Kembali</button>` 
+        : '<span class="status-kembali">Sudah Kembali</span>';
+
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${item.tanggal}</td>
+        <td>${item.nama}</td>
+        <td>${item.kelas}</td>
+        <td>${item.alasan}</td>
+        <td class="status-keluar">${item.waktuKeluar}</td>
+        <td>${item.waktuKembali}</td>
+        <td>${aksiButton}</td>
+      `;
+
+      tabelData.appendChild(tr);
+    });
+  }
+
+  // Fungsi untuk mencatat waktu siswa kembali
+  function catatKembali(id) {
+    let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
+    const skrg = new Date();
+    const jamKembali = String(skrg.getHours()).padStart(2, '0') + ':' + String(skrg.getMinutes()).padStart(2, '0');
+
+    listIzin = listIzin.map(item => {
+      if (item.id === id) {
+        item.waktuKembali = jamKembali;
+      }
+      return item;
+    });
+
+    localStorage.setItem('listIzinSiswa', JSON.stringify(listIzin));
+    loadData();
+  }
+</script>
+
+</body>
+</html>
