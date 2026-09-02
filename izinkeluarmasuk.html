@@ -15,7 +15,7 @@
       padding: 20px;
     }
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
     }
     h2 {
@@ -59,6 +59,18 @@
     .btn-submit:hover {
       background-color: #218838;
     }
+    .btn-cancel {
+      background-color: #6c757d;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
     .table-container {
       overflow-x: auto;
     }
@@ -88,16 +100,25 @@
       color: #28a745;
       font-weight: bold;
     }
-    .btn-kembali {
-      background-color: #007bff;
-      color: white;
+    /* Tombol Aksi */
+    .btn-action {
       border: none;
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 12px;
+      margin-right: 2px;
     }
-    .btn-kembali:hover {
-      background-color: #0056b3;
+    .btn-kembali { background-color: #007bff; color: white; }
+    .btn-kembali:hover { background-color: #0056b3; }
+    .btn-edit { background-color: #ffc107; color: #333; }
+    .btn-edit:hover { background-color: #e0a800; }
+    .btn-hapus { background-color: #dc3545; color: white; }
+    .btn-hapus:hover { background-color: #c82333; }
+    .action-group {
+      display: flex;
+      gap: 4px;
+      align-items: center;
     }
   </style>
 </head>
@@ -108,7 +129,10 @@
   
   <!-- Formulir Input -->
   <div class="card">
+    <h3 id="formTitle">Input Izin Siswa Baru</h3>
     <form id="izinForm">
+      <input type="hidden" id="editId" value="">
+
       <div class="form-group">
         <label for="nama">Nama Siswa</label>
         <input type="text" id="nama" placeholder="Masukkan nama siswa" required>
@@ -137,7 +161,8 @@
         <input type="time" id="waktuKeluar" required>
       </div>
 
-      <button type="submit" class="btn-submit">Simpan Izin Keluar</button>
+      <button type="submit" id="btnSubmit" class="btn-submit">Simpan Izin Keluar</button>
+      <button type="button" id="btnCancel" class="btn-cancel" onclick="resetForm()">Batal Edit</button>
     </form>
   </div>
 
@@ -159,7 +184,7 @@
           </tr>
         </thead>
         <tbody id="tabelData">
-          <!-- Data otomatis muncul di sini -->
+          <!-- Data otomatis diisi oleh JS -->
         </tbody>
       </table>
     </div>
@@ -167,51 +192,64 @@
 </div>
 
 <script>
-  // Ambil elemen dari HTML
   const izinForm = document.getElementById('izinForm');
   const tabelData = document.getElementById('tabelData');
+  const editIdInput = document.getElementById('editId');
+  const formTitle = document.getElementById('formTitle');
+  const btnSubmit = document.getElementById('btnSubmit');
+  const btnCancel = document.getElementById('btnCancel');
 
-  // Muat data dari LocalStorage saat halaman pertama dibuka
-  document.addEventListener('DOMContentLoaded', loadData);
+  document.addEventListener('DOMContentLoaded', () => {
+    setDefaultWaktuKeluar();
+    loadData();
+  });
 
-  // Otomatis isi Waktu Keluar dengan jam sekarang
-  const skrg = new Date();
-  const jamSekarang = String(skrg.getHours()).padStart(2, '0') + ':' + String(skrg.getMinutes()).padStart(2, '0');
-  document.getElementById('waktuKeluar').value = jamSekarang;
+  function setDefaultWaktuKeluar() {
+    const skrg = new Date();
+    const jamSekarang = String(skrg.getHours()).padStart(2, '0') + ':' + String(skrg.getMinutes()).padStart(2, '0');
+    document.getElementById('waktuKeluar').value = jamSekarang;
+  }
 
-  // Tangani Submit Form
+  // Handle Form Submit (Bisa untuk Simpan Baru maupun Update Edit)
   izinForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
+    const id = editIdInput.value;
     const nama = document.getElementById('nama').value;
     const kelas = document.getElementById('kelas').value;
     const alasan = document.getElementById('alasan').value;
     const waktuKeluar = document.getElementById('waktuKeluar').value;
 
-    const dataIzin = {
-      id: Date.now(),
-      tanggal: new Date().toLocaleDateString('id-ID'),
-      nama: nama,
-      kelas: kelas,
-      alasan: alasan,
-      waktuKeluar: waktuKeluar,
-      waktuKembali: '-'
-    };
+    let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
 
-    simpanKeLocalStorage(dataIzin);
-    izinForm.reset();
-    document.getElementById('waktuKeluar').value = jamSekarang; // Reset jam
+    if (id) {
+      // Modus EDIT: Update data lama
+      listIzin = listIzin.map(item => {
+        if (item.id == id) {
+          return { ...item, nama, kelas, alasan, waktuKeluar };
+        }
+        return item;
+      });
+    } else {
+      // Modus BARU: Tambah data baru
+      const dataIzin = {
+        id: Date.now(),
+        tanggal: new Date().toLocaleDateString('id-ID'),
+        nama: nama,
+        kelas: kelas,
+        alasan: alasan,
+        waktuKeluar: waktuKeluar,
+        waktuKembali: '-'
+      };
+      listIzin.push(dataIzin);
+    }
+
+    localStorage.setItem('listIzinSiswa', JSON.stringify(listIzin));
+    resetForm();
     loadData();
   });
 
-  // Fungsi simpan data ke LocalStorage browser
-  function simpanKeLocalStorage(data) {
-    let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
-    listIzin.push(data);
-    localStorage.setItem('listIzinSiswa', JSON.stringify(listIzin));
-  }
-
-  // Fungsi menampilkan data ke tabel
+  // Tampilkan data ke tabel
   function loadData() {
     tabelData.innerHTML = '';
     let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
@@ -224,9 +262,9 @@
     listIzin.forEach((item, index) => {
       const tr = document.createElement('tr');
       
-      const aksiButton = item.waktuKembali === '-' 
-        ? `<button class="btn-kembali" onclick="catatKembali(${item.id})">Set Kembali</button>` 
-        : '<span class="status-kembali">Sudah Kembali</span>';
+      const statusKembaliBtn = item.waktuKembali === '-' 
+        ? `<button class="btn-action btn-kembali" onclick="catatKembali(${item.id})">Set Kembali</button>` 
+        : `<span class="status-kembali">${item.waktuKembali}</span>`;
 
       tr.innerHTML = `
         <td>${index + 1}</td>
@@ -235,15 +273,20 @@
         <td>${item.kelas}</td>
         <td>${item.alasan}</td>
         <td class="status-keluar">${item.waktuKeluar}</td>
-        <td>${item.waktuKembali}</td>
-        <td>${aksiButton}</td>
+        <td>${statusKembaliBtn}</td>
+        <td>
+          <div class="action-group">
+            <button class="btn-action btn-edit" onclick="editData(${item.id})">Edit</button>
+            <button class="btn-action btn-hapus" onclick="hapusData(${item.id})">Hapus</button>
+          </div>
+        </td>
       `;
 
       tabelData.appendChild(tr);
     });
   }
 
-  // Fungsi untuk mencatat waktu siswa kembali
+  // Fungsi Catat Jam Kembali
   function catatKembali(id) {
     let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
     const skrg = new Date();
@@ -258,6 +301,45 @@
 
     localStorage.setItem('listIzinSiswa', JSON.stringify(listIzin));
     loadData();
+  }
+
+  // FITUR EDIT: Isi form dengan data yang dipilih
+  function editData(id) {
+    let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
+    const item = listIzin.find(data => data.id === id);
+
+    if (item) {
+      editIdInput.value = item.id;
+      document.getElementById('nama').value = item.nama;
+      document.getElementById('kelas').value = item.kelas;
+      document.getElementById('alasan').value = item.alasan;
+      document.getElementById('waktuKeluar').value = item.waktuKeluar;
+
+      formTitle.textContent = "Edit Data Izin Siswa";
+      btnSubmit.textContent = "Update Data";
+      btnCancel.style.display = "block";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // FITUR HAPUS: Menghapus baris data
+  function hapusData(id) {
+    if (confirm("Apakah Anda yakin ingin menghapus data perizinan ini?")) {
+      let listIzin = JSON.parse(localStorage.getItem('listIzinSiswa')) || [];
+      listIzin = listIzin.filter(item => item.id !== id);
+      localStorage.setItem('listIzinSiswa', JSON.stringify(listIzin));
+      loadData();
+    }
+  }
+
+  // Reset Form ke keadaan semula (Tambah Baru)
+  function resetForm() {
+    izinForm.reset();
+    editIdInput.value = '';
+    formTitle.textContent = "Input Izin Siswa Baru";
+    btnSubmit.textContent = "Simpan Izin Keluar";
+    btnCancel.style.display = "none";
+    setDefaultWaktuKeluar();
   }
 </script>
 
