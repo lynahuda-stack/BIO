@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi Genetik & Kuis Interaktif - Biologi Kelas 12</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --subtext: #94a3b8;
+      --correct: #22c55e;
+      --wrong: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .slide-container {
+      width: 85%;
+      max-width: 900px;
+      height: 540px;
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      padding: 35px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid #334155;
+      position: relative;
+    }
+    .slide-container.active { display: flex; }
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #334155;
+      padding-bottom: 12px;
+    }
+    .slide-title { font-size: 1.4rem; color: var(--accent); font-weight: 700; }
+    .slide-number { font-size: 0.9rem; color: var(--subtext); }
+    .slide-body {
+      display: flex;
+      gap: 24px;
+      margin-top: 15px;
+      height: 100%;
+      align-items: center;
+    }
+    .slide-text { flex: 1.2; font-size: 0.95rem; line-height: 1.6; color: #e2e8f0; }
+    .slide-text ul { padding-left: 20px; margin-top: 8px; }
+    .slide-text li { margin-bottom: 6px; }
+    .slide-img {
+      flex: 0.8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0f172a;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid #334155;
+    }
+    .controls {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    button.btn-nav {
+      background-color: var(--accent);
+      color: #0f172a;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button.btn-nav:hover { opacity: 0.9; }
+    button.btn-nav:disabled { background-color: #475569; cursor: not-allowed; color: #94a3b8; }
+
+    /* Style Khusus Kuis */
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .quiz-btn {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      padding: 10px 14px;
+      border-radius: 6px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .quiz-btn:hover:not(:disabled) {
+      background: #475569;
+    }
+    .quiz-btn.correct {
+      background-color: var(--correct) !important;
+      color: #fff;
+    }
+    .quiz-btn.wrong {
+      background-color: var(--wrong) !important;
+      color: #fff;
+    }
+    .explanation {
+      margin-top: 12px;
+      padding: 10px;
+      background: #0f172a;
+      border-left: 4px solid var(--accent);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Slide 1 -->
+  <div class="slide-container active">
+    <div class="slide-header">
+      <div class="slide-title">1. Pendahuluan Materi Genetik</div>
+      <div class="slide-number">01 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Materi genetik adalah substansi yang membawa informasi hereditas dari suatu organisme yang diwariskan dari induk ke keturunannya.</p>
+        <ul>
+          <li><strong>Lokasi:</strong> Terletak di dalam inti sel (nukleus), mitokondria, dan kloroplas.</li>
+          <li><strong>Bentuk Utama:</strong> DNA (Deoxyribonucleic Acid) dan RNA (Ribonucleic Acid).</li>
+          <li><strong>Fungsi:</strong> Mengontrol struktur, fungsi sel, serta mengatur sintesis protein.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">2. Struktur Kromosom</div>
+      <div class="slide-number">02 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Kromosom adalah struktur padat yang terdiri dari benang-benang kromatin yang terpintal rapat bersama protein histon.</p>
+        <ul>
+          <li><strong>Kromatid:</strong> Lengan kromosom hasil replikasi.</li>
+          <li><strong>Sentromer:</strong> Bagian penyempitan yang menahan dua kromatid bersaudara.</li>
+          <li><strong>Kinetokor:</strong> Tempat melekatnya benang spindel saat pembelahan.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">3. Bentuk-Bentuk Kromosom</div>
+      <div class="slide-number">03 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Berdasarkan letak sentromernya, kromosom dibagi menjadi 4 tipe utama:</p>
+        <ul>
+          <li><strong>Metasentrik:</strong> Sentromer di tengah (lengan sama panjang).</li>
+          <li><strong>Submetasentrik:</strong> Sentromer sedikit menggeser dari tengah (bentuk L).</li>
+          <li><strong>Akrosentrik:</strong> Sentromer mendekati salah satu ujung.</li>
+          <li><strong>Telosentrik:</strong> Sentromer berada di paling ujung lengan.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">4. Tipe dan Jumlah Kromosom</div>
+      <div class="slide-number">04 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Kromosom dalam sel tubuh (somatis) berpasangan (diploid/2n), sedangkan pada sel kelamin tunggal (haploid/n).</p>
+        <ul>
+          <li><strong>Autosom:</strong> Kromosom tubuh yang tidak menentukan jenis kelamin (44 buah / 22 pasang pada manusia).</li>
+          <li><strong>Gonosom:</strong> Kromosom seks yang menentukan jenis kelamin (2 buah: XX untuk betina, XY untuk jantan).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">5. Gen dan Alel</div>
+      <div class="slide-number">05 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p><strong>Gen:</strong> Unit terkecil materi genetik yang mengodekan rantai polipeptida atau sifat tertentu.</p>
+        <ul>
+          <li><strong>Lokus:</strong> Lokasi spesifik gen di dalam kromosom.</li>
+          <li><strong>Alel:</strong> Pasangan gen alternatif yang terletak pada lokus bersesuaian di kromosom homolog.</li>
+          <li><strong>Alel Homozigot:</strong> Pasangan alel identik (AA / aa).</li>
+          <li><strong>Alel Heterozigot:</strong> Pasangan alel berbeda (Aa).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">6. Struktur Kimia DNA</div>
+      <div class="slide-number">06 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>DNA adalah polimer rantai ganda yang terbuat dari unit-unit nukleotida.</p>
+        <ul>
+          <li>Setiap Nukleotida terdiri dari:
+            <ol>
+              <li>Gula deoksiribosa (pentosa tanpa 1 atom oksigen)</li>
+              <li>Gugus fosfat</li>
+              <li>Basa nitrogen</li>
+            </ol>
+          </li>
+          <li>Nukleosida = Gula pentosa + Basa nitrogen (tanpa fosfat).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">7. Model Double Helix DNA</div>
+      <div class="slide-number">07 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Ditemukan oleh Watson dan Crick (1953). DNA berbentuk tangga tali terpilin ganda ganda berarah antiparalel (5' &rarr; 3' dan 3' &rarr; 5').</p>
+        <ul>
+          <li>Ibu tangga dibangun oleh gula deoksiribosa dan fosfat.</li>
+          <li>Anak tangga dibentuk oleh pasangan basa nitrogen yang dihubungkan oleh <strong>ikatan hidrogen</strong>.</li>
+        </ul>
+      </div>
+      <div class="slide-img">
+        <!-- SVG Diagram Double Helix -->
+        <svg width="180" height="220" viewBox="0 0 100 150">
+          <path d="M 30,10 Q 70,37.5 30,65 T 30,120" stroke="#38bdf8" stroke-width="4" fill="none"/>
+          <path d="M 70,10 Q 30,37.5 70,65 T 70,120" stroke="#f43f5e" stroke-width="4" fill="none"/>
+          <line x1="38" y1="20" x2="62" y2="20" stroke="#e2e8f0" stroke-width="2"/>
+          <line x1="48" y1="37" x2="52" y2="37" stroke="#e2e8f0" stroke-width="2"/>
+          <line x1="38" y1="55" x2="62" y2="55" stroke="#e2e8f0" stroke-width="2"/>
+          <line x1="38" y1="75" x2="62" y2="75" stroke="#e2e8f0" stroke-width="2"/>
+          <line x1="48" y1="92" x2="52" y2="92" stroke="#e2e8f0" stroke-width="2"/>
+          <line x1="38" y1="110" x2="62" y2="110" stroke="#e2e8f0" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">8. Pasangan Basa Nitrogen DNA</div>
+      <div class="slide-number">08 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Basa nitrogen pada DNA terbagi menjadi dua kelompok utama:</p>
+        <ul>
+          <li><strong>Purin:</strong> Adenin (A) dan Guanin (G).</li>
+          <li><strong>Pirimidin:</strong> Sitosin (C/S) dan Timin (T).</li>
+        </ul>
+        <p style="margin-top:8px;"><strong>Aturan Chargaff:</strong> Pasangan spesifik selalu terikat:</p>
+        <ul>
+          <li>Adenin (A) = Timin (T) &rarr; <em>2 ikatan hidrogen</em>.</li>
+          <li>Guanin (G) = Sitosin (C) &rarr; <em>3 ikatan hidrogen</em>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 9 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">9. Hipotesis Replikasi DNA</div>
+      <div class="slide-number">09 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Proses penggandaan DNA terjadi melalui 3 model hipotesis:</p>
+        <ul>
+          <li><strong>Konservatif:</strong> Pita ganda lama tetap utuh, pita ganda baru terbentuk sempurna.</li>
+          <li><strong>Semikonservatif:</strong> Dua pita DNA lama terpisah, masing-masing menjadi cetakan pita baru (Model terbukti benar).</li>
+          <li><strong>Dispersif:</strong> Pita ganda terputus-putus dan bercampur antara pita lama dan baru.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">10. Enzim dalam Replikasi DNA</div>
+      <div class="slide-number">10 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Replikasi DNA dibantu oleh berbagai enzim spesifik:</p>
+        <ul>
+          <li><strong>Helikase:</strong> Membuka ikatan double helix DNA.</li>
+          <li><strong>Primase:</strong> Membentuk RNA primer sebagai titik awal polimerisasi.</li>
+          <li><strong>DNA Polimerase:</strong> Menyusun rantai nukleotida baru (arah 5' &rarr; 3').</li>
+          <li><strong>Ligase:</strong> Menyambung fragmen-fragmen pendek DNA (Fragmen Okazaki).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 11 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">11. Garpu Replikasi</div>
+      <div class="slide-number">11 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Proses pembentukan pita baru pada garpu replikasi terbagi menjadi dua mekanisme:</p>
+        <ul>
+          <li><strong>Leading Strand:</strong> Dibuat secara kontinu searah dengan jalurnya garpu replikasi.</li>
+          <li><strong>Lagging Strand:</strong> Dibuat secara terputus-putus menjauhi garpu replikasi, menghasilkan potongan pendek yang disebut <em>Fragmen Okazaki</em>.</li>
+        </ul>
+      </div>
+      <div class="slide-img">
+        <!-- SVG Garpu Replikasi -->
+        <svg width="180" height="180" viewBox="0 0 100 100">
+          <path d="M 10,20 L 40,50 L 90,50" stroke="#38bdf8" stroke-width="3" fill="none"/>
+          <path d="M 10,80 L 40,50 L 90,50" stroke="#f43f5e" stroke-width="3" fill="none"/>
+          <path d="M 20,28 L 50,28" stroke="#22c55e" stroke-width="2" fill="none" stroke-dasharray="3,2"/>
+          <path d="M 20,72 L 35,72" stroke="#eab308" stroke-width="2" fill="none"/>
+          <path d="M 40,72 L 55,72" stroke="#eab308" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 12 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">12. Struktur RNA</div>
+      <div class="slide-number">12 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>RNA (Ribonucleic Acid) memiliki struktur berbeda dari DNA:</p>
+        <ul>
+          <li>Rantai tunggal (single strand) dan lebih pendek.</li>
+          <li>Komponen gula adalah <strong>Ribosa</strong>.</li>
+          <li>Basa Pirimidin terdiri atas <strong>Sitosin (C)</strong> dan <strong>Urasil (U)</strong> (Timin digantikan Urasil).</li>
+          <li>Bersifat tidak stabil dan kadarnya dapat berubah-ubah.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 13 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">13. Jenis-Jenis RNA</div>
+      <div class="slide-number">13 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Terdapat tiga jenis utama RNA dengan fungsi berbeda dalam sel:</p>
+        <ul>
+          <li><strong>mRNA / dRNA:</strong> Membawa pesan genetik (kodon) dari nukleus ke sitoplasma.</li>
+          <li><strong>tRNA:</strong> Membawa asam amino spesifik dari sitoplasma menuju ribosom (memiliki antikodon).</li>
+          <li><strong>rRNA:</strong> Menyusun komponen struktur utama ribosom tempat pembentukan protein.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 14 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">14. Perbedaan DNA dan RNA</div>
+      <div class="slide-number">14 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <ul>
+          <li><strong>Bentuk:</strong> DNA Ganda Terpilin | RNA Tunggal.</li>
+          <li><strong>Gula:</strong> DNA Deoksiribosa | RNA Ribosa.</li>
+          <li><strong>Basa Nitrogen:</strong> DNA (A, T, G, C) | RNA (A, U, G, C).</li>
+          <li><strong>Letak:</strong> DNA (Inti sel, mitokondria) | RNA (Sitoplasma, ribosom).</li>
+          <li><strong>Kadar:</strong> DNA Tetap | RNA Berubah-ubah.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 15 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">15. Kode Genetik (Kodon)</div>
+      <div class="slide-number">15 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Kode genetik berwujud kombinasi 3 basa nitrogen (Triplet/Kodon) yang mengode satu jenis asam amino.</p>
+        <ul>
+          <li><strong>Kodon Start:</strong> AUG (Mengodekan asam amino Metionin, penanda sintesis dimulai).</li>
+          <li><strong>Kodon Stop:</strong> UAA, UAG, UGA (Penanda akhir ekspresi rantai polipeptida).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 16 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">16. Alur Sintesis Protein (Dogma Sentral)</div>
+      <div class="slide-number">16 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Sintesis protein adalah proses penerjemahan informasi genetik menjadi urutan asam amino penentu struktur protein.</p>
+        <br>
+        <p style="text-align:center; font-weight: bold; color: var(--accent); font-size: 1.1rem;">
+          DNA &rarr; Transkripsi &rarr; mRNA &rarr; Translasi &rarr; Protein
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 17 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">17. Transkripsi (Pembentukan mRNA)</div>
+      <div class="slide-number">17 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Proses pencetakan mRNA oleh pita DNA template (antisense) di nukleus melalui 3 tahap:</p>
+        <ul>
+          <li><strong>Inisiasi:</strong> RNA Polimerase menempel pada wilayah promoter.</li>
+          <li><strong>Elongasi:</strong> Pembacaan DNA cetakan dan pencetakan RNA komplementer (A&rarr;U, T&rarr;A, C&rarr;G).</li>
+          <li><strong>Terminasi:</strong> Pelepasan rantai mRNA saat mencapai daerah terminator.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 18 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">18. Translasi (Penerjemahan Kodon)</div>
+      <div class="slide-number">18 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Penerjemahan urutan kodon mRNA menjadi urutan asam amino oleh tRNA di dalam Ribosom:</p>
+        <ul>
+          <li><strong>Inisiasi:</strong> Subunit ribosom menempel pada AUG (Start).</li>
+          <li><strong>Elongasi:</strong> tRNA membawa asam amino sesuai antikodonnya dan merangkai ikatan peptida.</li>
+          <li><strong>Terminasi:</strong> Reaksi berhenti saat ribosom membaca kodon stop.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 19 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">19. Hubungan DNA, Gen, Kromosom & Protein</div>
+      <div class="slide-number">19 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p>Integrasi fenotipik organisme diproses secara teratur:</p>
+        <ul>
+          <li>DNA tergulung rapat membentuk benang kromatin &rarr; melipat membentuk Kromosom.</li>
+          <li>Potongan-potongan sekuens aktif pada DNA mewujud sebagai Gen.</li>
+          <li>Ekspresi gen dieksekusi melalui Sintesis Protein membentuk enzim, hormon, dan karakter fisik (fenotip).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 20 -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">20. Rangkuman</div>
+      <div class="slide-number">20 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <ul>
+          <li>Materi genetik mengontrol pewarisan sifat makhluk hidup.</li>
+          <li>DNA bersifat pembawa informasi abadi; RNA pelaksana ekspresi genetik.</li>
+          <li>Sintesis protein merupakan jembatan antara instruksi genetik (Genotip) dengan penampilan fisik yang terlihat (Fenotip).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 21 (Kuis 1) -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">21. Kuis 1: Basa Nitrogen</div>
+      <div class="slide-number">21 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p><strong>Soal 1:</strong> Jika suatu rantai molekul DNA memiliki 30% Guanin, berapakah persentase Timin pada molekul DNA tersebut?</p>
+        <div class="quiz-options" id="opt-q1">
+          <button class="quiz-btn" onclick="checkAnswer(1, 'A', false, this)">A. 30%</button>
+          <button class="quiz-btn" onclick="checkAnswer(1, 'B', true, this)">B. 20%</button>
+          <button class="quiz-btn" onclick="checkAnswer(1, 'C', false, this)">C. 40%</button>
+          <button class="quiz-btn" onclick="checkAnswer(1, 'D', false, this)">D. 60%</button>
+        </div>
+        <div class="explanation" id="exp-q1">
+          <strong>Pembahasan (Jawaban B):</strong><br>
+          Berdasarkan Aturan Chargaff: %Guanin = %Sitosin = 30% (Total G+C = 60%).<br>
+          Sisa basa (%Adenin + %Timin) = 100% - 60% = 40%.<br>
+          Karena %Adenin = %Timin, maka %Timin = 40% / 2 = <strong>20%</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 22 (Kuis 2) -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">22. Kuis 2: Enzim Replikasi</div>
+      <div class="slide-number">22 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p><strong>Soal 2:</strong> Enzim yang berfungsi menyambungkan potongan-potongan Fragmen Okazaki pada rantai <em>lagging strand</em> saat replikasi DNA adalah...</p>
+        <div class="quiz-options" id="opt-q2">
+          <button class="quiz-btn" onclick="checkAnswer(2, 'A', false, this)">A. Helikase</button>
+          <button class="quiz-btn" onclick="checkAnswer(2, 'B', false, this)">B. DNA Polimerase</button>
+          <button class="quiz-btn" onclick="checkAnswer(2, 'C', true, this)">C. Ligase</button>
+          <button class="quiz-btn" onclick="checkAnswer(2, 'D', false, this)">D. RNA Primase</button>
+        </div>
+        <div class="explanation" id="exp-q2">
+          <strong>Pembahasan (Jawaban C):</strong><br>
+          Enzim <strong>Ligase</strong> bertugas melem atau menyambungkan fragmen pendek DNA (Fragmen Okazaki) menjadi satu rantai utuh. Helikase bertugas membuka pilinan, sedangkan DNA Polimerase menyusun rantai baru.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 23 (Kuis 3) -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">23. Kuis 3: Transkripsi DNA ke mRNA</div>
+      <div class="slide-number">23 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p><strong>Soal 3:</strong> Apabila pita DNA cetakan (template/antisense) memiliki urutan basa <code>3'- TAC - GCT - CGA - 5'</code>, maka urutan basa mRNA hasil transkripsi adalah...</p>
+        <div class="quiz-options" id="opt-q3">
+          <button class="quiz-btn" onclick="checkAnswer(3, 'A', false, this)">A. 5'- ATG - CGA - GCT - 3'</button>
+          <button class="quiz-btn" onclick="checkAnswer(3, 'B', true, this)">B. 5'- AUG - CGA - GCU - 3'</button>
+          <button class="quiz-btn" onclick="checkAnswer(3, 'C', false, this)">C. 5'- UAC - GCU - CGA - 3'</button>
+          <button class="quiz-btn" onclick="checkAnswer(3, 'D', false, this)">D. 5'- AUG - CGU - GCA - 3'</button>
+        </div>
+        <div class="explanation" id="exp-q3">
+          <strong>Pembahasan (Jawaban B):</strong><br>
+          Transkripsi menghasilkan pasangan komplementer mRNA (RNA menggunakan Urasil menggantikan Timin):<br>
+          T &rarr; A | A &rarr; U | C &rarr; G | G &rarr; C.<br>
+          Cetakan: <code>TAC - GCT - CGA</code> &rarr; Hasil: <code>AUG - CGA - GCU</code>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 24 (Kuis 4) -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">24. Kuis 4: Struktur RNA vs DNA</div>
+      <div class="slide-number">24 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p><strong>Soal 4:</strong> Manakah dari komponen berikut yang HANYA ditemukan pada molekul RNA dan TIDAK ditemukan pada molekul DNA?</p>
+        <div class="quiz-options" id="opt-q4">
+          <button class="quiz-btn" onclick="checkAnswer(4, 'A', false, this)">A. Deoksiribosa dan Timin</button>
+          <button class="quiz-btn" onclick="checkAnswer(4, 'B', false, this)">B. Gugus Fosfat dan Adenin</button>
+          <button class="quiz-btn" onclick="checkAnswer(4, 'C', true, this)">C. Ribosa dan Urasil</button>
+          <button class="quiz-btn" onclick="checkAnswer(4, 'D', false, this)">D. Guanin dan Sitosin</button>
+        </div>
+        <div class="explanation" id="exp-q4">
+          <strong>Pembahasan (Jawaban C):</strong><br>
+          RNA memiliki gula <strong>Ribosa</strong> (DNA = Deoksiribosa) dan basa pirimidin <strong>Urasil</strong> (DNA = Timin). Gugus fosfat, Adenin, Guanin, dan Sitosin ditemukan pada DNA maupun RNA.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 25 (Kuis 5) -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">25. Kuis 5: Fungsi tRNA</div>
+      <div class="slide-number">25 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text">
+        <p><strong>Soal 5:</strong> Peran utama molekul tRNA (Transfer RNA) dalam proses translasi adalah...</p>
+        <div class="quiz-options" id="opt-q5">
+          <button class="quiz-btn" onclick="checkAnswer(5, 'A', false, this)">A. Membawa salinan cetakan genetik dari inti sel</button>
+          <button class="quiz-btn" onclick="checkAnswer(5, 'B', true, this)">B. Mengangkut asam amino spesifik ke ribosom</button>
+          <button class="quiz-btn" onclick="checkAnswer(5, 'C', false, this)">C. Membentuk struktur fisik tempat sintesis berlangsung</button>
+          <button class="quiz-btn" onclick="checkAnswer(5, 'D', false, this)">D. Memotong rantai mRNA setelah tahap terminasi</button>
+        </div>
+        <div class="explanation" id="exp-q5">
+          <strong>Pembahasan (Jawaban B):</strong><br>
+          tRNA berfungsi mengenali kodon pada mRNA melalui antikodonnya dan <strong>mengangkut asam amino yang sesuai</strong> dari sitoplasma ke ribosom untuk dirangkai menjadi rantai polipeptida (protein).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 26 (Hasil Kuis) -->
+  <div class="slide-container">
+    <div class="slide-header">
+      <div class="slide-title">26. Hasil Kuis Interaktif</div>
+      <div class="slide-number">26 / 26</div>
+    </div>
+    <div class="slide-body">
+      <div class="slide-text" style="text-align: center; width: 100%;">
+        <h3 style="color: var(--accent); font-size: 1.8rem; margin-bottom: 15px;">Hasil Evaluasi Anda</h3>
+        <p style="font-size: 1.2rem; margin-bottom: 20px;">Skor Akhir:</p>
+        <div id="score-display" style="font-size: 3.5rem; font-weight: bold; color: #22c55e;">0 / 100</div>
+        <p id="score-message" style="margin-top: 15px; color: var(--subtext);"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-nav" id="prevBtn" onclick="changeSlide(-1)" disabled>Sebelumnya</button>
+    <button class="btn-nav" id="nextBtn" onclick="changeSlide(1)">Selanjutnya</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let quizScore = 0;
+    const answeredQuestions = {};
+
+    function changeSlide(direction) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide += direction;
+      slides[currentSlide].classList.add('active');
+
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === slides.length - 1;
+
+      if (currentSlide === slides.length - 1) {
+        calculateFinalScore();
+      }
+    }
+
+    function checkAnswer(questionNum, option, isCorrect, btnElement) {
+      if (answeredQuestions[questionNum]) return; // Cegah menjawab berulang
+
+      answeredQuestions[questionNum] = true;
+      const optionsContainer = document.getElementById(`opt-q${questionNum}`);
+      const buttons = optionsContainer.querySelectorAll('.quiz-btn');
+
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+        btnElement.classList.add('correct');
+        quizScore += 20; // 5 soal = total 100 poin
+      } else {
+        btnElement.classList.add('wrong');
+      }
+
+      document.getElementById(`exp-q${questionNum}`).style.display = 'block';
+    }
+
+    function calculateFinalScore() {
+      const scoreDisplay = document.getElementById('score-display');
+      const scoreMsg = document.getElementById('score-message');
+      
+      scoreDisplay.innerText = `${quizScore} / 100`;
+
+      if (quizScore === 100) {
+        scoreMsg.innerText = "Sempurna! Anda sudah menguasai materi genetik dengan sangat baik.";
+      } else if (quizScore >= 60) {
+        scoreMsg.innerText = "Bagus! Anda memahami sebagian besar konsep materi genetik.";
+      } else {
+        scoreMsg.innerText = "Tetap semangat! Pelajari kembali slide materi untuk memperdalam pemahaman.";
+      }
+    }
+  </script>
+</body>
+</html>
