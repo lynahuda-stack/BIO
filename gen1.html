@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi Biologi Kelas 12 - Materi Genetik & Pewarisan Sifat</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --secondary: #27ae60;
+      --bg-light: #f8f9fa;
+      --text-dark: #333;
+      --border-color: #e2e8f0;
+      --sidebar-width: 300px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Overlay untuk tampilan mobile saat menu terbuka */
+    #sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 99;
+    }
+
+    /* Sidebar Navigation */
+    #sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--primary);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border-color);
+      box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, margin-left 0.3s ease;
+      z-index: 100;
+      height: 100%;
+      flex-shrink: 0;
+    }
+
+    /* Sembunyikan sidebar di desktop */
+    #sidebar.collapsed {
+      margin-left: calc(-1 * var(--sidebar-width));
+    }
+
+    .sidebar-header {
+      padding: 18px 20px;
+      background-color: #1a252f;
+      border-bottom: 1px solid #34495e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-header h2 {
+      font-size: 1.1rem;
+      color: #ecf0f1;
+    }
+
+    .menu-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+
+    .menu-category {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #bdc3c7;
+      padding: 15px 20px 5px;
+      font-weight: bold;
+    }
+
+    .nav-btn {
+      width: 100%;
+      padding: 12px 20px 12px 30px;
+      background: none;
+      border: none;
+      color: #ecf0f1;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      display: block;
+    }
+
+    .nav-btn:hover {
+      background-color: #34495e;
+      color: var(--secondary);
+      padding-left: 35px;
+    }
+
+    .nav-btn.active {
+      background-color: var(--secondary);
+      color: white;
+      font-weight: bold;
+    }
+
+    /* Main Content Area */
+    #main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    /* Header Atas dengan Tombol Toggle */
+    .top-bar {
+      height: 60px;
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .toggle-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.2s;
+    }
+
+    .toggle-btn:hover {
+      background-color: var(--secondary);
+    }
+
+    .top-bar-title {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1.05rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #content-area {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      background-color: #ffffff;
+    }
+
+    .content-section {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      border-bottom: 3px solid var(--secondary);
+      padding-bottom: 8px;
+      font-size: 1.8rem;
+    }
+
+    p {
+      line-height: 1.7;
+      margin-bottom: 15px;
+      color: #4a5568;
+    }
+
+    .image-container {
+      margin: 25px 0;
+      text-align: center;
+      background-color: var(--bg-light);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .image-caption {
+      font-size: 0.85rem;
+      color: #718096;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 20px;
+      color: #4a5568;
+      line-height: 1.6;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 500px;
+    }
+
+    table, th, td {
+      border: 1px solid var(--border-color);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: var(--bg-light);
+    }
+
+    /* Adaptasi untuk Layar HP/Tablet (Media Queries) */
+    @media (max-width: 768px) {
+      #sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        margin-left: 0 !important;
+      }
+
+      #sidebar.active {
+        transform: translateX(0);
+      }
+
+      #sidebar-overlay.active {
+        display: block;
+      }
+
+      #content-area {
+        padding: 20px 15px;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Overlay layar untuk mobile -->
+  <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Navigation Sidebar -->
+  <div id="sidebar">
+    <div class="sidebar-header">
+      <h2>Peta Materi Biologi XI</h2>
+    </div>
+    <div class="menu-container">
+      <div class="menu-category">1. Materi Genetik</div>
+      <button class="nav-btn active" onclick="showContent('dna', this)">DNA & Replikasi</button>
+      <button class="nav-btn" onclick="showContent('sintesis-protein', this)">Sintesis Protein</button>
+      <button class="nav-btn" onclick="showContent('gen', this)">Gen & Lokus</button>
+      <button class="nav-btn" onclick="showContent('kromosom', this)">Kromosom</button>
+      
+      <div class="menu-category">2. Pembelahan Sel</div>
+      <button class="nav-btn" onclick="showContent('mitosis', this)">Mitosis</button>
+      <button class="nav-btn" onclick="showContent('meiosis', this)">Meiosis</button>
+      
+      <div class="menu-category">3. Pewarisan Sifat</div>
+      <button class="nav-btn" onclick="showContent('hukum-mendel', this)">Hukum Mendel I & II</button>
+      <button class="nav-btn" onclick="showContent('penyimpangan', this)">Penyimpangan Semu</button>
+      
+      <div class="menu-category">4. Penerapan</div>
+      <button class="nav-btn" onclick="showContent('sifat-normal', this)">Pewarisan Sifat Normal</button>
+      <button class="nav-btn" onclick="showContent('kelainan', this)">Kelainan Genetik</button>
+      <button class="nav-btn" onclick="showContent('mutasi', this)">Mutasi</button>
+    </div>
+  </div>
+
+  <!-- Main Area -->
+  <div id="main-wrapper">
+    <!-- Top Bar dengan Tombol Sembunyikan/Tampilkan Menu -->
+    <div class="top-bar">
+      <button class="toggle-btn" onclick="toggleSidebar()">
+        ☰ <span>Menu</span>
+      </button>
+      <div class="top-bar-title">Materi Biologi Kelas 12</div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div id="content-area">
+      <!-- DNA -->
+      <div id="dna" class="content-section active">
+        <h1>DNA (Deoxyribonucleic Acid) & Replikasi</h1>
+        <p>DNA merupakan biomolekul penyimpan informasi genetik utama pada organisme. Berbentuk pilin ganda (<em>double helix</em>) ganda antiparalel.</p>
+        <div class="image-container">
+          <img src="https://cdn-web-2.ruangguru.com/landing-pages/assets/9a95da2f-f9ca-413e-971f-1351d928f789.jpg" alt="Struktur Kimia DNA">
+          <div class="image-caption">Gambar 1: Struktur ikatan asam nukleotida dan pasangan basa nitrogen pada DNA</div>
+        </div>
+        <h3>Unit Dasar DNA</h3>
+        <ul>
+          <li><strong>Gula Deoksiribosa:</strong> Gula pentosa yang kehilangan satu atom oksigen.</li>
+          <li><strong>Gugus Fosfat:</strong> Pengikat antar nukleotida.</li>
+          <li><strong>Basa Nitrogen:</strong> Purin (Adenin & Guanin) dan Pirimidin (Timin & Sitosin). Pasangan spesifik: A-T (2 ikatan H) dan G-C (3 ikatan H).</li>
+        </ul>
+        <h3>Replikasi DNA</h3>
+        <p>Proses penggandaan DNA yang terjadi secara semikonservatif dengan bantuan enzim Helikase, DNA Polimerase, dan Ligase.</p>
+      </div>
+
+      <!-- Sintesis Protein -->
+      <div id="sintesis-protein" class="content-section">
+        <h1>Sintesis Protein</h1>
+        <p>Sintesis protein adalah mekanisme penterjemahan instruksi genetik pada DNA menjadi rantai polipeptida (protein).</p>
+        <div class="image-container">
+          <img src="https://www.azolifesciences.com/image-handler/picture/2021/2/shutterstock_758695576.jpg" alt="Dogma Sentral Biologi">
+          <div class="image-caption">Gambar 2: Dogma Sentral (Transkripsi dari DNA ke RNA dan Translasi ke Protein)</div>
+        </div>
+        <ol>
+          <li><strong>Transkripsi:</strong> Proses pencetakan mRNA oleh RNA Polimerase dari cetakan DNA template di dalam inti sel.</li>
+          <li><strong>Translasi:</strong> Penerjemahan triplet kodon pada mRNA oleh tRNA di ribosom untuk merangkai asam amino. Kodon Start: <code>AUG</code>, Kodon Stop: <code>UAA, UAG, UGA</code>.</li>
+        </ol>
+      </div>
+
+      <!-- Gen -->
+      <div id="gen" class="content-section">
+        <h1>Gen & Lokus</h1>
+        <p>Gen merupakan unit terkecil bahan genetik yang terdiri atas segmen DNA tertentu pengode protein.</p>
+        <div class="image-container">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGEDvQ7OoUUnejTjFLetDKgo1HVq3i8qKEPY2Wunq7vA&s=10" alt="Letak Gen pada DNA">
+          <div class="image-caption">Gambar 3: Hubungan antara Kromosom, DNA, dan Segmen Gen</div>
+        </div>
+        <p>Posisi atau tempat spesifik gen berada di sepanjang rantai kromosom dinamakan <strong>Lokus</strong>. Alel adalah bentuk alternatif dari suatu gen yang berada pada lokus bersesuaian.</p>
+      </div>
+
+      <!-- Kromosom -->
+      <div id="kromosom" class="content-section">
+        <h1>Struktur & Jenis Kromosom</h1>
+        <p>Kromosom adalah penebalan benang-benang kromatin yang mengandung kumpulan gen.</p>
+        <div class="image-container">
+          <img src="https://i.pinimg.com/736x/8b/b9/6f/8bb96fbda7d6b66ac1963f43467c3ae7.jpg" alt="Bentuk Kromosom">
+          <div class="image-caption">Gambar 4: Tipe bentuk kromosom berdasarkan letak sentromer</div>
+        </div>
+        <h3>Bentuk Kromosom Berdasarkan Sentromer:</h3>
+        <ul>
+          <li><strong>Metasentrik:</strong> Sentromer di tengah.</li>
+          <li><strong>Submetasentrik:</strong> Sentromer mendekati tengah.</li>
+          <li><strong>Akrosentrik:</strong> Sentromer mendekati ujung.</li>
+          <li><strong>Telosentrik:</strong> Sentromer berada di ujung kromatid.</li>
+        </ul>
+      </div>
+
+      <!-- Mitosis -->
+      <div id="mitosis" class="content-section">
+        <h1>Pembelahan Sel: Mitosis</h1>
+        <p>Pembelahan sel tubuh (somatis) yang menghasilkan 2 sel anak identik bersifat diploid (2n).</p>
+        <div class="image-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Mitosis_schematic_diagram-en.svg/800px-Mitosis_schematic_diagram-en.svg.png" alt="Tahapan Mitosis">
+          <div class="image-caption">Gambar 5: Tahapan Pembelahan Mitosis (Profase, Metafase, Anafase, Telofase)</div>
+        </div>
+        <ul>
+          <li><strong>Profase:</strong> Kromatin menebal; membran inti melebur.</li>
+          <li><strong>Metafase:</strong> Kromosom berjejer di bidang ekuator.</li>
+          <li><strong>Anafase:</strong> Kromatid saudara berpisah menuju kutub berlawanan.</li>
+          <li><strong>Telofase:</strong> Membran inti terbentuk kembali; diakhiri sitokinesis.</li>
+        </ul>
+      </div>
+
+      <!-- Meiosis -->
+      <div id="meiosis" class="content-section">
+        <h1>Pembelahan Sel: Meiosis</h1>
+        <p>Pembelahan sel kelamin (gonad) yang menghasilkan 4 sel anak haploid (n) dan mengalami pemotongan jumlah kromosom.</p>
+        <div class="image-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Meiosis_Diagram.svg/800px-Meiosis_Diagram.svg.png" alt="Tahapan Meiosis">
+          <div class="image-caption">Gambar 6: Tahapan Meiosis I dan Meiosis II</div>
+        </div>
+        <p>Pada <strong>Profase I</strong> terjadi peristiwa penting yaitu <em>Crossing Over</em> (pindah silang) pada kiasma yang memicu keberagaman/variasi genetik.</p>
+      </div>
+
+      <!-- Hukum Mendel -->
+      <div id="hukum-mendel" class="content-section">
+        <h1>Hukum Pewarisan Sifat Mendel</h1>
+        <p>Prinsip dasar penurunan sifat berdasarkan percobaan persilangan tanaman kacang ercis oleh Gregor Mendel.</p>
+        <div class="image-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Punnett_square_mendel_flowers.svg/600px-Punnett_square_mendel_flowers.svg.png" alt="Diagram Punnett">
+          <div class="image-caption">Gambar 7: Diagram Punnett pada persilangan Monohibrid</div>
+        </div>
+        <ul>
+          <li><strong>Hukum Mendel I (Segregasi):</strong> Pemisahan alel secara bebas pada pembentukan gamet (Persilangan Monohibrid - Rasio Fenotipe 3:1).</li>
+          <li><strong>Hukum Mendel II (Asortasi):</strong> Pengelompokan alel secara bebas (Persilangan Dihibrid - Rasio Fenotipe 9:3:3:1).</li>
+        </ul>
+      </div>
+
+      <!-- Penyimpangan Semu -->
+      <div id="penyimpangan" class="content-section">
+        <h1>Penyimpangan Semu Hukum Mendel</h1>
+        <p>Modifikasi rasio fenotipe klasik akibat interaksi antar gen/alel.</p>
+        <div class="image-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Comb_types_in_chickens.svg/800px-Comb_types_in_chickens.svg.png" alt="Bentuk Jengger Ayam">
+          <div class="image-caption">Gambar 8: Atavisme pada variasi bentuk jengger/pial ayam</div>
+        </div>
+        <ul>
+          <li><strong>Atavisme:</strong> Interaksi antar gen menghasilkan sifat baru (Pial ayam).</li>
+          <li><strong>Kriptomeri:</strong> Gen dominan tersembunyi jika berdiri sendiri (Bunga <em>Linaria maroccana</em>).</li>
+          <li><strong>Epistasis & Hipostasis:</strong> Gen yang menutupi atau tertutupi ekspresinya oleh gen lain.</li>
+        </ul>
+      </div>
+
+      <!-- Pewarisan Sifat Normal -->
+      <div id="sifat-normal" class="content-section">
+        <h1>Pewarisan Sifat Normal Manusia</h1>
+        <p>Ciri fisik non-pathologis yang diturunkan dari orang tua ke anak secara autosomal atau gonosomal.</p>
+        <div class="image-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Eye_color_comparison.jpg/800px-Eye_color_comparison.jpg" alt="Variasi Warna Mata">
+          <div class="image-caption">Gambar 9: Variasi ekspresi warna mata pada manusia</div>
+        </div>
+        <ul>
+          <li><strong>Warna Kulit:</strong> Dipengaruhi oleh akumulasi banyak gen (Poligenik).</li>
+          <li><strong>Bentuk Rambut:</strong> Rambut keriting (C) dominan terhadap lurus (s).</li>
+        </ul>
+      </div>
+
+      <!-- Kelainan Genetik -->
+      <div id="kelainan" class="content-section">
+        <h1>Kelainan Genetik yang Diturunkan</h1>
+        <p>Gangguan medis yang diwariskan melalui kelainan gen atau kromosom.</p>
+        <div class="image-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Ishihara_9.svg/600px-Ishihara_9.svg.png" alt="Tes Ishihara Buta Warna">
+          <div class="image-caption">Gambar 10: Pelat tes Ishihara untuk identifikasi buta warna</div>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <tr>
+              <th>Kelainan</th>
+              <th>Pewarisan</th>
+              <th>Karakteristik</th>
+            </tr>
+            <tr>
+              <td>Albinisme</td>
+              <td>Autosom Resesif</td>
+              <td>Absensi pigmen melanin kulit/rambut</td>
+            </tr>
+            <tr>
+              <td>Buta Warna</td>
+              <td>Terpaut Seks (X) Resesif</td>
+              <td>Ketidakmampuan membedakan warna tertentu</td>
+            </tr>
+            <tr>
+              <td>Sindrom Down</td>
+              <td>Trisomi Autosom 21</td>
+              <td>Kelebihan 1 kromosom nomor 21 (47, XX/XY)</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Mutasi -->
+      <div id="mutasi" class="content-section">
+        <h1>Mutasi Genetik</h1>
+        <p>Perubahan materi genetik (DNA atau kromosom) yang dapat diwariskan jika terjadi pada sel gamet.</p>
+        <div class="image-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Sickle_cell_01.svg/800px-Sickle_cell_01.svg.png" alt="Anemia Sel Sabit">
+          <div class="image-caption">Gambar 11: Perubahan bentuk eritrosit pada mutasi gen Sickle Cell Anemia</div>
+        </div>
+        <ul>
+          <li><strong>Mutasi Gen:</strong> Perubahan susunan basa nitrogen (contoh: <em>Sickle Cell Anemia</em>).</li>
+          <li><strong>Mutasi Kromosom:</strong> Perubahan jumlah/struktur kromosom (contoh: <em>Sindrom Klinefelter</em>).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Script -->
+  <script>
+    // Fungsi Toggle Sidebar (Buka/Tutup)
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      
+      if (window.innerWidth <= 768) {
+        // Mode Mobile/Tablet
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+      } else {
+        // Mode Desktop
+        sidebar.classList.toggle('collapsed');
+      }
+    }
+
+    // Fungsi Pindah Konten
+    function showContent(sectionId, btnElement) {
+      // Sembunyikan semua seksi materi
+      const sections = document.querySelectorAll('.content-section');
+      sections.forEach(section => {
+        section.classList.remove('active');
+      });
+
+      // Hapus kelas 'active' dari semua tombol
+      const buttons = document.querySelectorAll('.nav-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Tampilkan seksi materi yang dipilih
+      const targetSection = document.getElementById(sectionId);
+      if (targetSection) {
+        targetSection.classList.add('active');
+      }
+
+      // Aktifkan tombol yang diklik
+      if (btnElement) {
+        btnElement.classList.add('active');
+      }
+
+      // Otomatis tutup sidebar di layar HP setelah materi diklik
+      if (window.innerWidth <= 768) {
+        toggleSidebar();
+      }
+    }
+  </script>
+</body>
+</html>
